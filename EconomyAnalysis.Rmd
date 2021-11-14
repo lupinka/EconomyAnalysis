@@ -17,6 +17,8 @@ r["CRAN"] = "http://cran.us.r-project.org"
 options(repos = r)
 install.packages("readxl")
 library("readxl")
+library(dplyr)
+library(tidyr)
 ```
 
 ## Wczytanie danych z pliku
@@ -57,5 +59,16 @@ worldDevelopmentIndicators <- read_excel(worldDevelopmentIndicatorsPath)
 ## Podsumowanie danych 
 
 ```{r}
-knitr::kable(summary(currencyExchangeRates))
+knitr::kable(summary(worldDevelopmentIndicators))
+knitr::kable(head(worldDevelopmentIndicators))
+```
+
+## Czyszczenie danych
+
+```{r}
+cleandeWorldDevelopmentIndicators <- worldDevelopmentIndicators %>% 
+  mutate_at(vars(!c('Country Name', 'Country Code', 'Series Name', 'Series Code')), as.numeric) %>%
+  pivot_longer(!c('Country Name', 'Country Code', 'Series Name', 'Series Code'), names_to = "year", values_to="value")
+knitr::kable(head(cleandeWorldDevelopmentIndicators))
+
 ```
