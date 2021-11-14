@@ -1,0 +1,61 @@
+---
+title: "EconomyAnalysis"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Instalacja bibliotek
+```{r}
+r = getOption("repos")
+r["CRAN"] = "http://cran.us.r-project.org"
+options(repos = r)
+install.packages("readxl")
+library("readxl")
+```
+
+## Wczytanie danych z pliku
+
+Ścieżka do folderu z danymi
+
+```{r}
+dataDirectoryPath <- 'C:/Users/anna/OneDrive/Nauka/II semestr II stopień/Zaawansowana Eksploracja Danych/Data pack/Data pack/'
+```
+
+Wczytanie pliku CurrencyExchangeRates.csv
+
+```{r}
+currencyExchangeRatesPath <- paste0(dataDirectoryPath, 'CurrencyExchangeRates.csv')
+currencyExchangeRates <- read.csv(currencyExchangeRatesPath)
+```
+
+Wczytanie pliku Gold prices.csv
+
+```{r}
+goldPricesPath <- paste0(dataDirectoryPath, 'Gold prices.csv')
+goldPrices <- read.csv(goldPricesPath)
+```
+
+Wczytanie pliku S&P Composite.csv
+
+```{r}
+spCompositePath <- paste0(dataDirectoryPath, 'S&P Composite.csv')
+spComposite <- read.csv(spCompositePath)
+```
+
+Wczytanie pliku World_Development_Indicators.xlsx
+```{r}
+worldDevelopmentIndicatorsPath <- paste0(dataDirectoryPath, 'World_Development_Indicators.xlsx')
+worldDevelopmentIndicators <- read_excel(worldDevelopmentIndicatorsPath)
+```
+
+## Podsumowanie danych 
+
+```{r}
+knitr::kable(summary(currencyExchangeRates))
+```
