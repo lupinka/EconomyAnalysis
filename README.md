@@ -1,1 +1,1 @@
-"# EconomyAnalysis" 
+# EconomyAnalysis
