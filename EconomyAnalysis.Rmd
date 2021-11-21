@@ -8,17 +8,21 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(scipen=999)
 ```
 
 ## Instalacja bibliotek
-```{r}
+```{r cache=TRUE}
 r = getOption("repos")
 r["CRAN"] = "http://cran.us.r-project.org"
 options(repos = r)
 install.packages("readxl")
+```
+```{r}
 library("readxl")
 library(dplyr)
 library(tidyr)
+library(ggplot2)
 ```
 
 ## Wczytanie danych z pliku
@@ -66,9 +70,27 @@ knitr::kable(head(worldDevelopmentIndicators))
 ## Czyszczenie danych
 
 ```{r}
-cleandeWorldDevelopmentIndicators <- worldDevelopmentIndicators %>% 
+cleanedWorldDevelopmentIndicators <- worldDevelopmentIndicators[1:42600,]
+cleanedWorldDevelopmentIndicators <- cleanedWorldDevelopmentIndicators %>% 
   mutate_at(vars(!c('Country Name', 'Country Code', 'Series Name', 'Series Code')), as.numeric) %>%
   pivot_longer(!c('Country Name', 'Country Code', 'Series Name', 'Series Code'), names_to = "year", values_to="value")
-knitr::kable(head(cleandeWorldDevelopmentIndicators))
+knitr::kable(head(cleanedWorldDevelopmentIndicators))
 
+cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicators %>% 
+  pivot_wider(names_from = c('Series Name', 'Series Code'), values_from = 'value',  names_glue = "{`Series Name`}") %>%
+  select(`Country Name`, year, `Urban population growth (annual %)`, `Urban population (% of total population)`, `Unemployment, total (% of total labor force) (national estimate)`, `Trade in services (% of GDP)`, `Trade (% of GDP)`)
+knitr::kable(head(cleanedWorldDevelopmentIndicatorsResult))
+
+```
+
+## GDP 
+```{r}
+ggplot(
+  cleanedWorldDevelopmentIndicatorsResult, 
+  aes(x=year, 
+      y=`Trade (% of GDP)`)
+) +
+geom_line() +
+geom_smooth() + 
+facet_grid(`Country Name` ~ .)
 ```

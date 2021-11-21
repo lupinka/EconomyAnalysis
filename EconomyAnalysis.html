@@ -250,12 +250,7 @@ div.tocify {
 r[&quot;CRAN&quot;] = &quot;http://cran.us.r-project.org&quot;
 options(repos = r)
 install.packages(&quot;readxl&quot;)</code></pre>
-<pre><code>## Instalowanie pakietu w &#39;C:/Users/anna/OneDrive/Dokumenty/R/win-library/4.1&#39;
-## (ponieważ &#39;lib&#39; nie jest określony)</code></pre>
-<pre><code>## package &#39;readxl&#39; successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-##  C:\Users\anna\AppData\Local\Temp\RtmpqqX7zX\downloaded_packages</code></pre>
+<pre><code>## Warning: pakiet &#39;readxl&#39; jest w użyciu i nie zostanie zainstalowany</code></pre>
 <pre class="r"><code>library(&quot;readxl&quot;)
 library(dplyr)</code></pre>
 <pre><code>## 
@@ -266,7 +261,8 @@ library(dplyr)</code></pre>
 <pre><code>## Następujące obiekty zostały zakryte z &#39;package:base&#39;:
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(tidyr)</code></pre>
+<pre class="r"><code>library(tidyr)
+library(ggplot2)</code></pre>
 </div>
 <div id="wczytanie-danych-z-pliku" class="section level2">
 <h2>Wczytanie danych z pliku</h2>
@@ -714,9 +710,9 @@ worldDevelopmentIndicators &lt;- read_excel(worldDevelopmentIndicatorsPath)</cod
 <td align="left">5.8235730871367268</td>
 <td align="left">5.630224006217686</td>
 <td align="left">5.3432279050454463</td>
-<td align="left">5.10630157969629</td>
+<td align="left">5.1063015796962903</td>
 <td align="left">4.8468811388339557</td>
-<td align="left">4.37453609220787</td>
+<td align="left">4.3745360922078698</td>
 <td align="left">3.6065232283582866</td>
 <td align="left">3.1108384247192271</td>
 <td align="left">2.0900441537398984</td>
@@ -730,7 +726,7 @@ worldDevelopmentIndicators &lt;- read_excel(worldDevelopmentIndicatorsPath)</cod
 <td align="left">2.5640069725948305</td>
 <td align="left">4.8981009658901087</td>
 <td align="left">7.3195240256083647</td>
-<td align="left">8.96374245914583</td>
+<td align="left">8.9637424591458306</td>
 <td align="left">9.2067878276952264</td>
 <td align="left">8.0786053967512572</td>
 <td align="left">6.3013700652162354</td>
@@ -765,56 +761,56 @@ worldDevelopmentIndicators &lt;- read_excel(worldDevelopmentIndicatorsPath)</cod
 <td align="left">AFG</td>
 <td align="left">Urban population (% of total population)</td>
 <td align="left">SP.URB.TOTL.IN.ZS</td>
-<td align="left">11.643</td>
-<td align="left">12.021</td>
+<td align="left">11.643000000000001</td>
+<td align="left">12.021000000000001</td>
 <td align="left">12.41</td>
-<td align="left">12.809</td>
-<td align="left">13.219</td>
+<td align="left">12.808999999999999</td>
+<td align="left">13.218999999999999</td>
 <td align="left">13.641</td>
 <td align="left">14.074</td>
-<td align="left">14.517</td>
-<td align="left">14.973</td>
+<td align="left">14.516999999999999</td>
+<td align="left">14.973000000000001</td>
 <td align="left">15.442</td>
-<td align="left">15.995</td>
-<td align="left">16.562</td>
-<td align="left">17.147</td>
+<td align="left">15.994999999999999</td>
+<td align="left">16.562000000000001</td>
+<td align="left">17.146999999999998</td>
 <td align="left">17.747</td>
-<td align="left">18.365</td>
+<td align="left">18.364999999999998</td>
 <td align="left">18.997</td>
-<td align="left">19.647</td>
+<td align="left">19.646999999999998</td>
 <td align="left">20.314</td>
-<td align="left">20.998</td>
-<td align="left">21.088</td>
+<td align="left">20.998000000000001</td>
+<td align="left">21.088000000000001</td>
 <td align="left">21.177</td>
-<td align="left">21.266</td>
+<td align="left">21.265999999999998</td>
 <td align="left">21.355</td>
-<td align="left">21.444</td>
-<td align="left">21.534</td>
-<td align="left">21.624</td>
-<td align="left">21.714</td>
+<td align="left">21.443999999999999</td>
+<td align="left">21.533999999999999</td>
+<td align="left">21.623999999999999</td>
+<td align="left">21.713999999999999</td>
 <td align="left">21.805</td>
 <td align="left">21.895</td>
-<td align="left">21.986</td>
-<td align="left">22.078</td>
+<td align="left">21.986000000000001</td>
+<td align="left">22.077999999999999</td>
 <td align="left">22.169</td>
-<td align="left">22.261</td>
-<td align="left">22.353</td>
+<td align="left">22.260999999999999</td>
+<td align="left">22.353000000000002</td>
 <td align="left">22.5</td>
-<td align="left">22.703</td>
+<td align="left">22.702999999999999</td>
 <td align="left">22.907</td>
 <td align="left">23.113</td>
 <td align="left">23.32</td>
-<td align="left">23.528</td>
-<td align="left">23.737</td>
+<td align="left">23.527999999999999</td>
+<td align="left">23.736999999999998</td>
 <td align="left">23.948</td>
 <td align="left">24.16</td>
-<td align="left">24.373</td>
+<td align="left">24.373000000000001</td>
 <td align="left">24.587</td>
-<td align="left">24.803</td>
+<td align="left">24.803000000000001</td>
 <td align="left">25.02</td>
 <td align="left">25.25</td>
-<td align="left">25.495</td>
-<td align="left">25.754</td>
+<td align="left">25.495000000000001</td>
+<td align="left">25.754000000000001</td>
 <td align="left">26.026</td>
 </tr>
 <tr class="odd">
@@ -1031,7 +1027,7 @@ worldDevelopmentIndicators &lt;- read_excel(worldDevelopmentIndicatorsPath)</cod
 <td align="left">..</td>
 <td align="left">..</td>
 <td align="left">..</td>
-<td align="left">2.49</td>
+<td align="left">2.4900000000000002</td>
 <td align="left">..</td>
 <td align="left">..</td>
 <td align="left">..</td>
@@ -1050,7 +1046,8 @@ worldDevelopmentIndicators &lt;- read_excel(worldDevelopmentIndicatorsPath)</cod
 </div>
 <div id="czyszczenie-danych" class="section level2">
 <h2>Czyszczenie danych</h2>
-<pre class="r"><code>cleandeWorldDevelopmentIndicators &lt;- worldDevelopmentIndicators %&gt;% 
+<pre class="r"><code>cleanedWorldDevelopmentIndicators &lt;- worldDevelopmentIndicators[1:42600,]
+cleanedWorldDevelopmentIndicators &lt;- cleanedWorldDevelopmentIndicators %&gt;% 
   mutate_at(vars(!c(&#39;Country Name&#39;, &#39;Country Code&#39;, &#39;Series Name&#39;, &#39;Series Code&#39;)), as.numeric) %&gt;%
   pivot_longer(!c(&#39;Country Name&#39;, &#39;Country Code&#39;, &#39;Series Name&#39;, &#39;Series Code&#39;), names_to = &quot;year&quot;, values_to=&quot;value&quot;)</code></pre>
 <pre><code>## Warning in mask$eval_all_mutate(quo): pojawiły się wartości NA na skutek
@@ -1205,7 +1202,7 @@ worldDevelopmentIndicators &lt;- read_excel(worldDevelopmentIndicatorsPath)</cod
 
 ## Warning in mask$eval_all_mutate(quo): pojawiły się wartości NA na skutek
 ## przekształcenia</code></pre>
-<pre class="r"><code>knitr::kable(head(cleandeWorldDevelopmentIndicators))</code></pre>
+<pre class="r"><code>knitr::kable(head(cleanedWorldDevelopmentIndicators))</code></pre>
 <table>
 <colgroup>
 <col width="13%" />
@@ -1276,6 +1273,503 @@ worldDevelopmentIndicators &lt;- read_excel(worldDevelopmentIndicatorsPath)</cod
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>cleanedWorldDevelopmentIndicatorsResult &lt;- cleanedWorldDevelopmentIndicators %&gt;% 
+  pivot_wider(names_from = c(&#39;Series Name&#39;, &#39;Series Code&#39;), values_from = &#39;value&#39;,  names_glue = &quot;{`Series Name`}&quot;) %&gt;%
+  select(`Country Name`, year, `Urban population growth (annual %)`, `Urban population (% of total population)`, `Unemployment, total (% of total labor force) (national estimate)`, `Trade in services (% of GDP)`, `Trade (% of GDP)`)
+knitr::kable(head(cleanedWorldDevelopmentIndicatorsResult))</code></pre>
+<table style="width:100%;">
+<colgroup>
+<col width="6%" />
+<col width="6%" />
+<col width="16%" />
+<col width="19%" />
+<col width="30%" />
+<col width="13%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Country Name</th>
+<th align="left">year</th>
+<th align="right">Urban population growth (annual %)</th>
+<th align="right">Urban population (% of total population)</th>
+<th align="right">Unemployment, total (% of total labor force) (national estimate)</th>
+<th align="right">Trade in services (% of GDP)</th>
+<th align="right">Trade (% of GDP)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Afghanistan</td>
+<td align="left">1970 [YR1970]</td>
+<td align="right">5.748488</td>
+<td align="right">11.643</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">21.72811</td>
+</tr>
+<tr class="even">
+<td align="left">Afghanistan</td>
+<td align="left">1971 [YR1971]</td>
+<td align="right">5.860102</td>
+<td align="right">12.021</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">27.06314</td>
+</tr>
+<tr class="odd">
+<td align="left">Afghanistan</td>
+<td align="left">1972 [YR1972]</td>
+<td align="right">5.899299</td>
+<td align="right">12.410</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">32.86908</td>
+</tr>
+<tr class="even">
+<td align="left">Afghanistan</td>
+<td align="left">1973 [YR1973]</td>
+<td align="right">5.823573</td>
+<td align="right">12.809</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">27.69231</td>
+</tr>
+<tr class="odd">
+<td align="left">Afghanistan</td>
+<td align="left">1974 [YR1974]</td>
+<td align="right">5.630224</td>
+<td align="right">13.219</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">28.86598</td>
+</tr>
+<tr class="even">
+<td align="left">Afghanistan</td>
+<td align="left">1975 [YR1975]</td>
+<td align="right">5.343228</td>
+<td align="right">13.641</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">26.94836</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="gdp" class="section level2">
+<h2>GDP</h2>
+<pre class="r"><code>ggplot(
+  cleanedWorldDevelopmentIndicatorsResult, 
+  aes(x=year, 
+      y=`Trade (% of GDP)`)
+) +
+geom_line() +
+geom_smooth() + 
+facet_grid(`Country Name` ~ .)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2894 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 77 row(s) containing missing values (geom_path).</code></pre>
+<pre><code>## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?</code></pre>
+<pre><code>## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?
+## geom_path: Each group consists of only one observation. Do you need to adjust
+## the group aesthetic?</code></pre>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABUAAAAPACAMAAADDuCPrAAADAFBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZrYZGSUZGTIZGUgZGXEZOoQZSEgZSFYZSHEZSJcZcboaGhobGRkyQRkzMzM6AAA6OgA6Ojo6OmY6Zjo6ZmY6ZpA6ZrY6kLY6kNtIGRlISBlISEhISHFIcXFIcZdIcbpIl91NTU1NTU5NTVBNTVFNTVJNTVlNTVtNTWNNTWRNTWlNTWtNTW5NTXlNTXtNTY5NTmdNUG9NUHVNUmtNUnlNUn9NU01NWU1NWZRNW6hNYKJNZG9NZKtNbqtNebVNg8hNjshOTU1OTk1QTU1Qdf9RTU1STU1SeeRSf81TU2RTZKJV//9XTU1ZTU1ZTk1ZlP9bTU1bqP9dKhldTU1eTU1kU01kq+RmAABmADpmOgBmOjpmOmZmOpBmZjpmZmZmZpBmkGZmkJBmkLZmtttmtv9o//9pTU1rck1uTU1ujshuq+RvTU1xGRlxSBlxSEhxcUhxcXFxcZdxl7pxuv91UE11qP91//93UU13aVN5eU1/ZFN/zf+A//+OTU2Obk2Ooo6OyP+O5P+QOgCQOjqQVk2QZjqQZmaQkGaQkLaQtraQttuQ2/+U//+XSBmXSHGXcUiXcXGXcZeXfjiXut2X3f+dXE2iYE2ion+ipY6i//+l5P+oW02o//+rXU2rZE2raU2rbk2r5P+2ZgC2Zjq2kDq2kGa2kJC2tpC2tra2ttu229u22/+2//+5//+6cRm6cUi6l3G6l5e6urq6ut263d26/7q6///Ia03IeVnIjk3IyKvI5P/I///Nak7Nd1DN///bkDrbkGbbtmbbtpDbtrbbttvb27bb29vb2//b///dl0jdunHdupfdurrd3brd///keVLknV7kq2Tkq27k/8jk////dVD/lFn/pV7/qFX/qFv/qHX/tmb/uWf/uYf/unH/yIP/yI7/zW//zXf/zc3/25D/27b/29v/3Zf/3br/3d3/5Kv/5Mj//3X//6X//6j//7X//7b//7r//8H//8j//83//9v//93//+T///8h1sXPAAAACXBIWXMAAB2HAAAdhwGP5fFlAAAgAElEQVR4nO3de5hc533Q8VEsBywu8QCKQhyilra8kpAoFFYgcSdS0SJuEmK5ug7EATtAATmkuOKqiMqQhqSkLdQqoALayk2rOJaBpgiKRqprBzsuToUoBcQaVSthW2lGFC9F9sucMzO7c11pfis/1aPz+TxPrXN2ZtL56/e858w531PLEW/Opj/0dX8nve8n35z9uu8t//Lf0taTPzOT/ki58z/Sln8W+t8F+LmzsP/n/9J6/RetX/Nvvv0f/ZKf9+du/IFa6P/Nl/98+rrv/fI3TjUWB+j//N2b/4EBClRKbID+u/Rrvjd/+Rvf95P5h9O3lH/57+k3/kj+5vR7yp3/mn7TLfuCALeryQdo6/D9b6b0J3OeT1+f/99fT7+v/Ot/Sr8t5+9Jv73c6f4LcCcLrEB/OKXf0jpwbw3S1uLzu9Ova7T+9r//ePrDxaH7xr/W2rk23TmUB7iTBQbo+ZT2TjWah1LrCD5f2Z22Hc0X96WtJ3P+mZm08UCem3EKFKiCyQfo//nLqevXtxafZzvbX/tPW6/NTZfb5ToU4A43+QC9lPoG6OXpngF6zQAFqiNwCD+f0o6cm8fS5sOtvX+btp/OzdnyeD5/c9riEB6oitCv8Okvtf/5lpy//MfS72/98Wc/WlwP6kckoEomH6A/+9FUDMufSL+1mKP/Of3qv1389SeKne/pXP/pMiagCgKH8D/70ff9+0Mppb9QzMwfTr/5H/+JlP7AP0lfn11ID1RKYIB++Rs7vyEVF4P+i+4PSr/3fT854lbOX9ZxC78xwG0i9iPSX/wvH/21fyN9bWuA/vOU/uCP5P/1t1L6XQYoUC2BAfoTraP1+fQ7U/Fb0pt/L/2O8o/fnX5Do2eAupAJuPPFYiJydgBydgBRcnYAQXJ2AEFydgBBgRXokcWYyFSjyNm1bTpY5uzanAIFKmDFObszvTm7C52dPbf8ewLcdiYfoPNLObuduagxbWht7erWmKxAgcpQYwIIUmMCCFJjAghSYwIIUmMCaFvYX1+y5tSNP6DGBBCkxgQQpMYEEKTGBBCkxgQQpMYEEBQYoOdT2jvVaB4qb3+/sjttO5ov7ktbT5Y1po0H8tyMU6BAFay4xnS2t8Y0N11uu4gJqILJB+il1DdAL0/3DNBrBihQHbE7kXbk3DyWNh/ORc5u++ncnO3m7LY4hAeqQs4OIEjODiBIzg4gSM4OIEjODmDIwn45O4C3kJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUBQYAV6ZDEmMtUocnZtmw6WObs2p0CBClhxzu5Mb87uQmdnzy3/ngC3nckH6PxSzm5nLmpMG1pbu7o1JitQoDLUmACC1JgAgtSYAILUmACC1JgA2hb2rznV+W9780bUmACC1JgAgtSYAILUmACC1JgAgtSYAIICA/R8SnunGs1D5e3vV3anbUfzxX1p68myxrTxQJ6bcQoUqIIV15jO9taY5qbLbRcxAVUw+QC9lPoG6OXpngF6zQAFqiN2J9KOnJvH0ubDucjZbT+dm7PdnN0Wh/BAVcjZAQTJ2QEEydkBBMnZAQTJ2QG0vfHFH1zyuXM3/oCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQFBgBXpkMSYy1Shydm2bDpY5uzanQIEKWHHO7kxvzu5CZ2fPLf+eALedyQfo/FLObmcuakwbWlu7ujUmK1CgMtSYAILUmACC1JgAgtSYAILUmAB6LOxfc+pm36vGBBCkxgQQpMYEEKTGBBCkxgQQpMYEEBQYoOdT2jvVaB4qb3+/sjttO5ov7ktbT5Y1po0H8tyMU6BAFay4xnS2t8Y0N11uu4gJqILJB+il1DdAL0/3DNBrBihQHbE7kXbk3DyWNh/ORc5u++ncnO3m7LY4hAeqQs4OIEjODiBIzg4gSM4OIEjODmDISx++maidnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUDbG5+65/HWP0/XH80L++XsAN5CcnYAQXJ2AEFydgBBcnYAQXJ2AEGBFeiRxZjIVKPI2bVtOljm7NqcAgUqYMU5uzO9ObsLnZ09t/x7Atx2Jh+g80s5u525qDFtaG3t6taYrECBylBjAghSYwIIUmMCCFJjAghSYwLoWHikzDHl/NL6m4kxqTEBRKkxAQSpMQEEqTEBBKkxAQSpMQEEBQbo+ZT2TjWah8rb36/sTtuO5ov70taTZY1p44E8N+MUKFAFK64xne2tMc1Nl9suYgKqYPIBein1DdDL0z0D9JoBClRH7E6kHTk3j6XNh3ORs9t+Ojdnuzm7LQ7hgaqQswMIkrMDCJKzAwiSswMIkrMDCJKzAwiSswMIkrMDCJKzAwiSswMIkrMDCAqsQI8sxkSmGkXOrm3TwTJn1+YUKFABK87ZnenN2V3o7Oy55d8T4LYz+QCdX8rZ7cxFjWlDa2tXt8ZkBQpUhhoTQJAaE0CQGhNAkBoTQJAaE0DL1UfWnMr5pUfqhV/8XTf1GTUmgCA1JoAgNSaAIDUmgCA1JoAgNSaAoMAAPZ/S3qlG81B5+/uV3Wnb0XxxX9p6sqwxbTyQ52acAgWqYMU1prO9Naa56XLbRUxAFUw+QC+lvgF6ebpngF4zQIHqiN2JtCPn5rG0+XAucnbbT+fmbDdnt8UhPFAVcnYAQXJ2AEFydgBBcnYAQXJ2AF0vfUW9/osfzwvfLmcH8JaSswMIkrMDCJKzAwiSswMIkrMDCJKzAwiSswMIkrMDCJKzAwiSswMIkrMDCJKzAwiSswMIkrMDaFvYv+bU8OYy5OwAguTsAILk7ACC5OwAguTsAILk7ACCAivQI4sxkalGkbNr23SwzNm1OQUKVMCKc3ZnenN2Fzo7e2759wS47Uw+QOeXcnY7c1Fj2tDa2tWtMVmBApWhxgQQpMYEEKTGBBCkxgQQpMYEMOTq+ntv4l1qTABBakwAQWpMAEFqTABBakwAQWpMAEGBAXo+pb1Tjeah8vb3K7vTtqP54r609WRZY9p4IM/NOAUKVMGKa0xne2tMc9PltouYgCqYfIBeSn0D9PJ0zwC9ZoAC1RG7E2lHzs1jafPhXOTstp/Ozdluzm6LQ3igKuTsAILk7ACC5OwAguTsAILk7ADa3vjOjyz5pnM3/oCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQNsbn7rn8dY/T9cfzQv715y68Qfk7ACC5OwAguTsAILk7ACC5OwAguTsAIICK9AjizGRqUaRs2vbdLDM2bU5BQpUwIpzdmd6c3YXOjt7bvn3BLjtTD5A55dydjtzUWPa0Nra1a0xWYEClaHGBBCkxgQQpMYEEKTGBBCkxgTQ9san6veee+Pp+jvO/cf19Udv4gNqTABBakwAQWpMAEFqTABBakwAQWpMAEGBAXo+pb1Tjeah8vb3K7vTtqP54r609WRZY9p4IM/NOAUKVMGKa0xne2tMc9PltouYgCqYfIBeSn0D9PJ0zwC9ZoAC1RG7E2lHzs1jafPhXOTstp/Ozdluzm6LQ3igKuTsAILk7ACC5OwAguTsAILk7ACGLOxfc+rG75KzAwiSswMIkrMDCJKzAwiSswMIkrMDCAqsQI8sxkSmGkXOrm3TwTJn1+YUKFABK87ZnenN2V3o7Oy55d8T4LYz+QCdX8rZ7cxFjWlDa2tXt8ZkBQpUhhoTQJAaE0CQGhNAkBoTQJAaE0DHT9UL9zy+sL9+7828X40JIEiNCSBIjQkgSI0JIEiNCSBIjQkgKDBAz6e0d6rRPFTe/n5ld9p2NF/cl7aeLGtMGw/kuRmnQIEqWHGN6WxvjWluutx2ERNQBZMP0Eupb4Benu4ZoNcMUKA6Ynci7ci5eSxtPpyLnN3207k5283ZbXEID1SFnB1AkJwdQJCcHUCQnB1AkJwdQMdLj9QXPXoT75ezAwiSswMIkrMDCJKzAwiSswMIkrMDCJKzAwiSswMIkrMDCJKzAwiSswMIkrMDCJKzAwiSswMIkrMDCJKzAwiSswMIkrMDCJKzAwiSswMIkrMDCAqsQI8sxkSmGkXOrm3TwTJn1+YUKFABK87ZnenN2V3o7Oy55d8T4LYzfoC+duLjDz744J898YWBv88v5ex25qLGtKG1tatbY7ICBSpjzAB9/v21Jfc92fuSGhNAaeQAfXZtrd9dDy+9qMYEUBoxQJ97oDUyVz/0ZPvY/bXPf/ydxf4nF19XYwIoDA3Q608U0/LF/r8925qh7+n+TY0JoDA4QF9/rLb6yRHvay1L736qvanGBNyRFvbf83hn8+r6Nadu/IGhAfoND498X2uE/qnOAFVjAiioMQEEqTEBBI0ZoINXzw9QYwIYNUCvP7G2vPTzxeGXCmpMAKXhAfpK9yr61U+N/ogaE0BhaIC+fn+x/PzlxcXzd49eg55Pae9Uo3movP39yu607Wi+uC9tPVnWmDYeyHMzToECVTA0QJ+p1VZ9W+vf51oL0Q+N+sRAjelsb41pbrrcdhETUAWDA/T6Y9252Zqkbx/1iUupb4Benu4ZoNcMUKA6RgzQcgFangsdfQw/n9KOnJvH0ubDucjZbT+dm7PdnN0Wh/BAVQzdiXR/7W1PDWz1k7MDKE0+QOXsAEqTD1A5O4BSYIDK2QEUAgNUzg64M11dX/+VP3Quv/Hj31GvP3oT7w8MUDk7gEJggGY5O4A8coAOGxqkcnYAwQEqZwcwfCfStz447IO9dyTJ2QGUAkV6OTuAwuQD9M0jizGRqUaRs2vbdLDM2bU5BQpUwOQDdCBnd6Y3Z3ehs7Pnln9PgNvOuAF6/fkTJ068MKrGNL+Us9uZixrThtbWrm6NyQoUqIyRA/TVj3Uf67HqoaHHy6kxAZRGPlSu7xqmXzGwDFVjAigND9CiSV+r3VVcvvSBciE6mFVWYwIoDA/Q462ZeV/3wP3Vj9WGnuyhxgRQGBqgxVON39uz333I3BI1JuDO9KVH6vWvOdfaeOPp+jvO3fj9QwP0+OCK83j/QFVjAmgb/1TOrpdHPCBejQlgVExk4Ih91NM51ZgAlumBjv+LGhNAjgxQNSaAUmAFqsYEUAgM0PMp7Z1qNA+Vt79f2Z22Hc0X96WtJ8sa08YDeW7GKVCgCiYfoAM1prO9Naa56XLbRUxAFUw+QC+lvgF6ebpngF4zQIHqCDwTaT6lHTk3j6XNh3ORs9t+Ojdnuzm7LQ7hgaqYfIDK2QGUJn+onJwdQCnwUDk5O4BCYIDK2QEUAgNUzg64011df+9NvCswQOXsAAqjB+irX8j59fevK71rsCSS5ewA8ugB+twDRUJ58YKmtw+/Q84OYNQAfaL9ILligN61bl1tMLBckLMDGDFAn+k8yrhzC+dQkF7ODqA0NECLheeHOhvFAL3+2GCiXs4OoDA0QJ/pnvTsRkSeGXyonJwdQGHUUznb5zy7A3TwGF7ODqA04qmcnSP27gB9Za2cHcAI43ug3a2hQqicHUAh9FA5OTuAyHPh5ewASiPOgQ5cOP/y4L1IcnYAhfGXMXUdH7yMSc4OoDA0QFtH7H3H8IP7cnbAHWphf73fmlPLf2BogBbH8D3nPIvdgZqInB1AYfhe+NaSs7b6k52dVx8YfCZnSc4OYFSN6eXWBK2t+uAnTpz41ncWW982/BY5O4CRPdBXHuh5pPHqEfNTzg5gXJH+ue4Ivevhodfk7ABKY5+J9PyJEyeefHHUK3J2AIXJHyr35pHFmMhUo8jZtW06WObs2pwCBSpg8gE6kLM705uzu9DZ2XPLvyfAbWfyATq/lLPbmYsa04bW1q5ujckKFKiMwCG8GhNAYfIBqsYEUJp8gKoxAZQCA1SNCaAQGKBqTMCdbGF/u8LU/Xe84aByee/7a18Y/xE1JoDC8CM9ivhS+7/jqTEBjBigxQr0RgNUjQlg1DOR7v7MC8/f/7YnX1gydDyvxgQw8plIQwYfa6zGBDDqkR5P3GCAqjEBlEZcxnT9hRM/sHbVJ04s+Uxf1u58SnunGs1D5e3vV3anbUfzxX1p68myxrTxQJ6bcQoUqILR14Eu9yPSQI3pbG+NaW663HYRE1AFowfo9W/94MiWcuFS6hugl6d7Bug1AxSojtidSDtybh5Lmw/nIme3/XRuznZzdlscwgNVMX6AvvbpdbXaqnUPDV7DJGcHUBo7QJcuZ3pv/wtydgClcQO0mJ93vfvBD7xz1ASVswMYO0BfWVu7+7Pl1quP1Vb1Pxpezg6gMGaAHq/d3f0Z/vpjtbf3vSZnB1AYcxnTYz2rzlfW3t13TZOcHUDhJi6kH3FVvZwdQHCAytkBjD2Er31ocefl2t2DtyXJ2QEEfkSSswMojb+MafWT5dbzDwxexiRnB1BY7kL62rp164ZvRXrzyGJMZKpR5OzaNh0sc3ZtToECFTD2Vs5n13bu5Fz1cP8LAzm7M705uwudnT1v7ZcGuB2Mj4lcf+4DrRXouz85+APS/FLObmcuakwbWlu7ujUmK1CgMibP2akxAZQmH6BqTAClQFBZjQmgEBigakwAhdgjPdSYACIDVI0JoBAYoFmNCSBHB6gaE0BwgKoxAcQupFdjAgitQNWYAArLDdDrzxYxpnd9cuDP51PaO9VoHipvf7+yO207mi/uS1tPljWmjQfy3IxToEAVLDNArz/W6TG9va8nMlBjOttbY5qbLrddxARUwTID9JnW6vPvn/j+9w8EQS+lvgF6ebpngF4zQIHqWCZn130u0uAzkeZT2pFz81jafDgXObvtp3Nztpuz2+IQHqiKwQF6/TPdrcWHcQ48lVPODqA0OEBfv3/1J7tbnWchvVzrG6BydgCloRXoY7Xa6s+Wm8drq+47ceLEx9b2P5VTzg6gNHwO9LkHarX7ihH6+gOdX+FXP9X3Bjk7gMKoH5GK58m958XWavTTxYPlVr1n4KlIcnbAHeqn//WH6y33fPV3nbuZt4/8Fb6YnKseKufmC8OvytkBFMZcxnT9idYIfXjwgZyL5OwAxl8H+urHarW7Hh7zopwdwHJ3IhUjdPXgjfBtcnYAowboa59+/7p3PfSF1tarDyxe07REzg6gNDxAn+lcvFTeAL94TVMPOTuAwtAAfblWW7XuwaJj174TvntN0xI5O4DCiDuR2u2lZ7oJkeufXtt3K6ecHUBp+F744YTI9e/vHaBydgCl4QHaSYi80r/u7CFnB1AYOgd6vLb6yRfz9ecfGEiILJKzAygNDdBX1nZ+he+sRIfI2QGUhi9jerUdYRq6/nORnB1AYdSdSNc/f+IzY2+Dl7MDaAs8F17ODrijLexfc2rpn2UEBqicHUBh/EPlhnx+6bBezg5g1EPlRv969OoDPdeFytkBDB/CPzNcD2l5/oFOXaRNzg5gzGVMd5U1u8W/fHxtrba6e1monB1AadxD5Wq1dz34iRMnTvxAGWbqe7yHnB1AYfRD5Z7t3o7Udlfv05HePLIYE5lqFDm7tk0Hy5xdm1OgQAWMu4zp1Y+v60zPdX2H80M5uzO9ObsLnZ09b/XXBvi5t+x1oC+8MOKpxvNLObuduagxbWht7erWmKxAgcqY/EJ6NSaA0uQDVI0JoBS4lVONCaAQGKBqTAAFNSaAtoX99X5qTABvkcAAzWpMADk6QNWYAIIDVI0JYPkBev0LI/6oxgRQGj9An3t/rfa2p17/hocGny+nxgRQGDdArz9RhERaA/T+2uqn+l86n9LeqUbzUHn7+5XdadvRfHFf2nqyrDFtPJDnZpwCBapg3AA9Xqut/jNr3/bU9b9bq93dtwYdqDGd7a0xzU2X2y5iAqpgzAB9uVZ7OL9+f/EYpGfX1j7U+9Kl1DdAL0/3DNBrBihQHWMG6PHiCUjtAZqfqb2977X5lHbk3DyWNh/ORc5u++ncnO3m7LY4hAeqYvQAvf7Yqm9bHKCvrH1b71lQOTuA0ugB2h6dnQHa+adLzg6gNPkAlbMDKI07hC9+OOpMzpcHfoaXswMojPkRqfzhqD1AW8N06EckOTvgzrOwf7Ff17O5jDED9JW1tfe8WA7QVx+oFT8o9ZCzAyiMu5D+meKBxmtXvfudrX/fO/SqnB3A+Hvhf3Rt57nwI+annB3AcjGR1z69rjU977rvsyNek7MDiD0XXs4OIBRUlrMDKAwN0NdeGNbfVZazAygMDtDX768N67sTSc4OoDT5AJWzAygNDtDrnz9R+r5abdUHP3HixMffWVv10Gf6buWUswMojPkRqbUQ7V7++Wz/AlTODqBtuaByx0BQWc4OoLRcULnjlbX9NSY5O4DCcj3QUTtZzg6gbdwA7VuB9g9QOTvgjvTGp+55vPXP0/VHV5azO95z3vP4QA9Uzg6gMP6xxu9pn/i8/kSt/7HGBTk7gLH3wh+v1WrvevDBB4se6HuGXpWzAxg7QIuF5/geqJwdwLI90GL1eddDXxj4u5wdQEnODiAoEFQ+shgTmWoUObu2TQfLnF2bU6BABSwzQK93c6DP/ellcnZnenN2Fzo7e97ibw1wGxg3QF/92Lic3fxSzm5nLmpMG1pbu7o1JitQoDLG15h63N07QNWYAEpjBugztdqqd39gbfF/tVUP972kxgRQGldjqt39YvHfDxWztD/GpMYEUFo2JvJMeRH98YFbOdWYAArL5uxeLjMiLw/ERNSYgDvT1fX1r/6h1r8//h31sst0IzcYoMXR++v39x/DqzEBFJYt0rdLoINB5azGBJBv8Eyk9qnQwaByVmMCyGMH6Ctra/d9tvgZ/r3FMB34GV6NCSAv2wNtrTtfrtVWrR0I2qkxAZTG3gv/o8WB+/Xj5Y1I/QtQNSaAwjIxkf/QmpvXn1237qGBA/jzKe2dajQPlbe/X9mdth3NF/elrSfLGtPGA3luxilQoAomz9kN1JjO9taY5qbLbRcxAVUw7lf4+z477hOXUt8AvTzdM0CvGaBAdYy7kH74SZyL5lPakXPzWNp8OBc5u+2nc3O2m7Pb4hAeqIpl70QaSc4OoLTsnUgjydkBlMb2QO8eexJUzg6gMGaAvvZ9tdpd736w44N9FzLJ2QEUxv6IVBv3TCQ5O+AO9XT93nN5Yf+aU/nH6vfexPsDA1TODqAw+YX0BTk7gOAAlbMDCA5QOTuAoQH6+v218dfQl+TsAEqTD1A5O4BSYAV6ZDEmMtUocnZtmw6WObs2p0CBCph8gA7k7M705uwudHb2vFVfF+D2MfkAnV/K2e3MRY1pQ2trV7fGZAUKVEboRyQ1JoDIAFVjAiiNGKDD+keqGhNAITBA1ZgACiMG6KrFjN3onJ0aE3CHuvpIve2eR2/m7YEL6dWYAAqBAZrVmABydICqMQEEB6gaE4AaE0CUGhNA0OAAvf75E595ceQ7F51Pae9Uo3movP39yu607Wi+uC9tPVnWmDYeyHMzToECVTB5kX6gxnS2t8Y0N11uu4gJqILJB+il1DdAL0/3DNBrBihQHYFnIs2ntCPn5rG0+XAucnbbT+fmbDdnt8UhPFAVkw9QOTuA0uQDVM4OoBQ4hJezAygEBqicHUAh9iOSnB1w51nYv+ZU57/tzRsJDFA5O4BCYIBmOTuAHB2gcnYAwQEqZwcQu5Bezg4gtAKVswMoBAaonB1AQc4OIEjODiBIzg4gSM4OIEjODiBIzg4gSM4OIEjODqBtYX99iZwdwFtIzg4gSM4OIEjODiBIzg4gSM4OICiwAj2yGBOZahQ5u7ZNB8ucXZtToEAFrDhnd6Y3Z3ehs7Pnln9PgNvO5AN0filntzMXNaYNra1d3RqTFShQGWpMAEFqTABBakwAQWpMAEFqTABDrq5XYwJ4C6kxAQSpMQEEqTEBBKkxAQSpMQEEBQbo+ZT2TjWah8rb36/sTtuO5ov70taTZY1p44E8N+MUKFAFK64xne2tMc1Nl9suYgKqYPIBein1DdDL0z0D9JoBClRH7E6kHTk3j6XNh3ORs9t+Ojdnuzm7LQ7hgaqQswMIkrMDCJKzAwiSswMIkrMD6LGwvxOy+9J31G+UtJOzAwiSswMIkrMDCJKzAwiSswMIkrMDCAqsQI8sxkSmGkXOrm3TwTJn1+YUKFABK87ZnenN2V3o7Oy55d8T4LYz+QCdX8rZ7cxFjWlDa2tXt8ZkBQpUhhoTQJAaE0CQGhNAkBoTQJAaE0C7wbQYYsq9m8tQYwIIUmMCCFJjAghSYwIIUmMCCFJjAggKDNDzKe2dajQPlbe/X9mdth3NF/elrSfLGtPGA3luxilQoApWXGM621tjmpsut13EBFTB5AP0UuoboJenewboNQMUqI7YnUg7cm4eS5sP5yJnt/10bs52c3ZbHMIDVSFnBxAkZwcQJGcHECRnBxAkZwcQJGcHECRnBxAkZwcQJGcHECRnBxAkZwcQJGcHECRnBxAkZwcQJGcHECRnBxAkZwcQJGcHECRnBxAkZwfQ8dIj9UWP3sT75ewAguTsAILk7ACC5OwAguTsAILk7ACCAivQI4sxkalGkbNr23SwzNm1OQUKVMCKc3ZnenN2Fzo7e2759wS47Uw+QOeXcnY7c1Fj2tDa2tWtMVmBApWhxgQQpMYEEKTGBBCkxgQQpMYE0PbGd35kff2er/rIX1lfr3/VR1q+6dzyH1BjAghSYwIIUmMCCFJjAghSYwIIUmMCCAoM0PMp7Z1qNA+Vt79f2Z22Hc0X96WtJ8sa08YDeW7GKVCgClZcYzrbW2Oamy63XcQEVMHkA/RS6hugl6d7Bug1AxSojtidSDtybh5Lmw/nIme3/XRuznZzdlscwgNVIWcHECRnBxAkZwcQJGcHECRnBy0919IAAAjfSURBVNDxU/XCPY8v7K/fezPvl7MDCJKzAwiSswMIkrMDCJKzAwiSswMICqxAjyzGRKYaRc6ubdPBMmfX5hQoUAErztmd6c3ZXejs7Lnl3xPgtjP5AJ1fytntzEWNaUNra1e3xmQFClSGGhNAkBoTQJAaE0CQGhNAkBoTQMdLj9QXPXoT71djAghSYwIIUmMCCFJjAghSYwIIUmMCCAoM0PMp7Z1qNA+Vt79f2Z22Hc0X96WtJ8sa08YDeW7GKVCgClZcYzrbW2Oamy63XcQEVMHkA/RS6hugl6d7Bug1AxSojtidSDtybh5Lmw/nIme3/XRuznZzdlscwgNVIWcHECRnBxAkZwcQJGcHECRnB9D2xhd/sN/nzi3/ATk7gCA5O4AgOTuAIDk7gCA5O4AgOTuAIDk7gCA5O4AgOTuAIDk7gCA5O4AgOTuAIDk7gCA5O4AgOTuAtr6c3efOvfFFOTuAt4icHUCQnB1AkJwdQJCcHUCQnB1AUGAFemQxJjLVKHJ2bZsOljm7NqdAgQpYcc7uTG/O7kJnZ88t/54At53JB+j8Us5uZy5qTBtaW7u6NSYrUKAy1JgAgtSYAILUmACC1JgAgtSYANoW9teXrDl14w+oMQEEqTEBBKkxAQSpMQEEqTEBBKkxAQQFBuj5lPZONZqHytvfr+xO247mi/vS1pNljWnjgTw34xQoUAUrrjGd7a0xzU2X2y5iAqpg8gF6KfUN0MvTPQP0mgEKVEfsTqQdOTePpc2Hc5Gz2346N2e7ObstDuGBqpCzAwiSswMIkrMDCJKzAwiSswPocXV9vX7vTb5Xzg4gSM4OIEjODiBIzg4gSM4OIEjODiBIzg4gSM4OIEjODiBIzg4gSM4OIEjODiBIzg4gSM4OIEjODqDr6frXnMtX17/j3I/V33Huxm+XswMIkrMDCJKzAwiSswMIkrMDCJKzAwgKrECPLMZEphpFzq5t08EyZ9fmFChQASvO2Z3pzdld6OzsueXfE+C2M/kAnV/K2e3MRY1pQ2trV7fGZAUKVIYaE0CQGhNAkBoTQJAaE0CQGhNAx9P1RztbP1W/9yber8YEEKTGBBCkxgQQpMYEEKTGBBCkxgQQFBig51PaO9VoHipvf7+yO207mi/uS1tPljWmjQfy3IxToEAVrLjGdLa3xjQ3XW67iAmogskH6KXUN0AvT/cM0GsGKFAdsTuRduTcPJY2H85Fzm776dyc7ebstjiEB6pCzg4gSM4OIEjODiBIzg4gSM4OoG3hw1/Z9hX1ev1X3cQH5OwAguTsAILk7ACC5OwAguTsAILk7ACCAivQI4sxkalGkbNr23SwzNm1OQUKVMCKc3ZnenN2Fzo7e2759wS47Uw+QOeXcnY7c1Fj2tDa2tWtMVmBApWhxgQQpMYEEKTGBBCkxgQQpMYEkPPV9fU1p/K/rNfrv7CMMX3NzXxIjQkgSI0JIEiNCSBIjQkgSI0JIEiNCSAoMEDPp7R3qtE8VN7+fmV32nY0X9yXtp4sa0wbD+S5GadAgSpYcY3pbG+NaW663HYRE1AFkw/QS6lvgF6e7hmg1wxQoDpidyLtyLl5LG0+nIuc3fbTuTnbzdltcQgPVIWcHUCQnB1AkJwdQJCcHUCQnB3Aoi/9w1MLH/7Kr/6um3u3nB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUCQnB1AkJwdQJCcHUDbwv57Hu9sXl2/5tSNPyBnBxAkZwcQJGcHECRnBxAkZwcQJGcHEBRYgR5ZjIlMNYqcXdumg2XOrs0pUKACVpyzO9Obs7vQ2dlzy78nwG1n8gE6v5Sz25mLGtOG1taubo3JChSoDDUmgCA1JoAgNSaAIDUmgCA1JoC2hf31RYtdpuWoMQEEqTEBBKkxAQSpMQEEqTEBBKkxAQQFBuj5lPZONZqHytvfr+xO247mi/vS1pNljWnjgTw34xQoUAUrrjGd7a0xzU2X2y5iAqpg8gF6KfUN0MvTPQP0mgEKVEfsTqQdOTePpc2Hc5Gz2346N2e7ObstDuGBqpCzAwiSswMIkrMDCJKzAwiSswMY9KVPydkBvJXk7ACC5OwAguTsAILk7ACC5OwAggIr0COLMZGpRpGza9t0sMzZtTkFClTAinN2Z3pzdhc6O3tu+fcEuO1MPkDnl3J2O3NRY9rQ2trVrTFZgQKVocYEEKTGBBCkxgQQpMYEEKTGBDDk6vp7b+JdakwAQWpMAEFqTABBakwAQWpMAEFqTABBgQF6PqW9U43mofL29yu707aj+eK+tPVkWWPaeCDPzTgFClTBimtMZ3trTHPT5baLmIAqmHyAXkp9A/TydM8AvWaAAtURuxNpR87NY2nz4Vzk7Lafzs3Zbs5ui0N4oCrk7ACC5OwAguTsAILk7ACC5OwAguTsAILk7ACC5OwAguTsAILk7ACC5OwAguTsAILk7ACC5OwAguTsAILk7ACC5OwAguTsAILk7ACC5OwA2t744g8u+dy5G39Azg4gSM4OIEjODiBIzg4gSM4OIEjODiAosAI9shgTmWoUObu2TQfLnF2bU6BABaw4Z3emN2d3obOz55Z/T4DbzuQDdH4pZ7czFzWmDa2tXd0akxUoUBlqTABBakwAQWpMAEFqTABBakwAHS89Ul/06E28X40JIEiNCSBIjQkgSI0JIEiNCSBIjQkgKDBAz6e0d6rRPFTe/n5ld9p2NF/cl7aeLGtMGw/kuRmnQIEqWHGN6WxvjWluutx2ERNQBZMP0Eupb4Benu4ZoNcMUKA6Ynci7ci5eSxtPpyLnN3207k5283ZbXEID1SFnB1AkJwdQJCcHUCQnB1AkJwdwKKf/ldfUa/Xv/Kvnrupd8vZAQTJ2QEEydkBBMnZAQTJ2QEEydkBBAVWoEcWYyJTjSJn17bpYJmza3MKFKiAFefszvTm7C50dvbc8u8JcNuZfIDOL+XsduaixrShtbWrW2OyAgUqQ40JIEiNCaDt//7Rer9fcIM7Ov8/YJb7veR8oh8AAAAASUVORK5CYII=" width="672" /></p>
 </div>
 
 
