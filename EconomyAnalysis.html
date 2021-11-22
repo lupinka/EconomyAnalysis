@@ -262,7 +262,10 @@ library(dplyr)</code></pre>
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
 <pre class="r"><code>library(tidyr)
-library(ggplot2)</code></pre>
+library(ggplot2)
+library(mlbench)
+library(caret)</code></pre>
+<pre><code>## Ładowanie wymaganego pakietu: lattice</code></pre>
 </div>
 <div id="wczytanie-danych-z-pliku" class="section level2">
 <h2>Wczytanie danych z pliku</h2>
@@ -1275,501 +1278,971 @@ cleanedWorldDevelopmentIndicators &lt;- cleanedWorldDevelopmentIndicators %&gt;%
 </table>
 <pre class="r"><code>cleanedWorldDevelopmentIndicatorsResult &lt;- cleanedWorldDevelopmentIndicators %&gt;% 
   pivot_wider(names_from = c(&#39;Series Name&#39;, &#39;Series Code&#39;), values_from = &#39;value&#39;,  names_glue = &quot;{`Series Name`}&quot;) %&gt;%
-  select(`Country Name`, year, `Urban population growth (annual %)`, `Urban population (% of total population)`, `Unemployment, total (% of total labor force) (national estimate)`, `Trade in services (% of GDP)`, `Trade (% of GDP)`)
-knitr::kable(head(cleanedWorldDevelopmentIndicatorsResult))</code></pre>
+  mutate_at(vars(year), as.factor)</code></pre>
+<div id="szukanie-najlepszych-features" class="section level3">
+<h3>Szukanie najlepszych features</h3>
+<pre class="r"><code>correlationMatrix &lt;- cor(cleanedWorldDevelopmentIndicatorsResult[,4:211],use=&quot;pairwise.complete.obs&quot;)
+correlationMatrix&lt;-correlationMatrix[,colSums(is.na(correlationMatrix))==0]
+highlyCorrelated &lt;- findCorrelation(correlationMatrix, cutoff=0.5)
+highlyCorrelated = sort(highlyCorrelated)
+reduced_Data = cleanedWorldDevelopmentIndicatorsResult[,-c(highlyCorrelated)]
+knitr::kable(head(reduced_Data))</code></pre>
 <table style="width:100%;">
 <colgroup>
-<col width="6%" />
-<col width="6%" />
-<col width="16%" />
-<col width="19%" />
-<col width="30%" />
-<col width="13%" />
-<col width="7%" />
+<col width="0%" />
+<col width="1%" />
+<col width="1%" />
+<col width="1%" />
+<col width="1%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="0%" />
+<col width="1%" />
+<col width="1%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="1%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="1%" />
+<col width="1%" />
+<col width="1%" />
+<col width="1%" />
+<col width="1%" />
+<col width="1%" />
+<col width="0%" />
+<col width="1%" />
+<col width="1%" />
+<col width="0%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="2%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="0%" />
+<col width="0%" />
+<col width="1%" />
+<col width="0%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">Country Name</th>
-<th align="left">year</th>
 <th align="right">Urban population growth (annual %)</th>
-<th align="right">Urban population (% of total population)</th>
+<th align="right">Value lost due to electrical outages (% of sales for affected firms)</th>
 <th align="right">Unemployment, total (% of total labor force) (national estimate)</th>
+<th align="right">Unemployment with advanced education (% of total labor force with advanced education)</th>
+<th align="right">Trained teachers in upper secondary education (% of total teachers)</th>
+<th align="right">Trained teachers in primary education (% of total teachers)</th>
+<th align="right">Trademark applications, direct nonresident</th>
 <th align="right">Trade in services (% of GDP)</th>
-<th align="right">Trade (% of GDP)</th>
+<th align="right">Trademark applications, direct resident</th>
+<th align="right">Trademark applications, total</th>
+<th align="right">Total natural resources rents (% of GDP)</th>
+<th align="right">Total greenhouse gas emissions (kt of CO2 equivalent)</th>
+<th align="right">Total greenhouse gas emissions (% change from 1990)</th>
+<th align="right">Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)</th>
+<th align="right">Time required to build a warehouse (days)</th>
+<th align="right">Time required to enforce a contract (days)</th>
+<th align="right">Taxes on income, profits and capital gains (current LCU)</th>
+<th align="right">Taxes on international trade (% of revenue)</th>
+<th align="right">Taxes on goods and services (% of revenue)</th>
+<th align="right">Taxes less subsidies on products (constant LCU)</th>
+<th align="right">Short-term debt (% of total external debt)</th>
+<th align="right">Short-term debt (% of exports of goods, services and primary income)</th>
+<th align="right">Service exports (BoP, current US<span class="math inline">\()| Self-employed, male (% of male employment) (modeled ILO estimate)| Self-employed, total (% of total employment) (modeled ILO estimate)| Self-employed, female (% of female employment) (modeled ILO estimate)| Secondary education, teachers| S&amp;P Global Equity Indices (annual % change)| Rural population| Research and development expenditure (% of GDP)| Renewable energy consumption (% of total final energy consumption)| Renewable electricity output (% of total electricity output)| Real interest rate (%)| Pupil-teacher ratio, secondary| Rail lines (total route-km)| Primary income payments (BoP, current US\)</span>)</th>
+<th align="right">Primary income receipts (BoP, current US<span class="math inline">\()| Primary school starting age (years)| Prevalence of undernourishment (% of population)| Population, female (% of total population)| Population living in slums (% of urban population)| Population in the largest city (% of urban population)| Population in largest city| Population ages 0-14 (% of total population)| PM2.5 air pollution, mean annual exposure (micrograms per cubic meter)| PM2.5 pollution, population exposed to levels exceeding WHO Interim Target-2 value (% of total)| Patent applications, residents| Number of under-five deaths| Net primary income (Net income from abroad) (current LCU)| Net primary income (Net income from abroad) (constant LCU)| Net primary income (BoP, current US\)</span>)</th>
+<th align="right">Net domestic credit (current LCU)</th>
+<th align="right">Natural gas rents (% of GDP)</th>
+<th align="right">Methane emissions (% change from 1990)</th>
+<th align="right">Methane emissions in energy sector (thousand metric tons of CO2 equivalent)</th>
+<th align="right">Merchandise exports to high-income economies (% of total merchandise exports)</th>
+<th align="right">Literacy rate, adult total (% of people ages 15 and above)</th>
+<th align="right">Life expectancy at birth, total (years)</th>
+<th align="right">Lending interest rate (%)</th>
+<th align="right">Land area (sq. km)</th>
+<th align="right">International tourism, expenditures (current US<span class="math inline">\()| Income share held by highest 10%| Imports of goods and services (% of GDP)| Gross savings (% of GDP)| Gross national expenditure (current US\)</span>)</th>
+<th align="right">Government expenditure on education, total (% of GDP)</th>
+<th align="right">Goods exports (BoP, current US<span class="math inline">\()| Goods imports (BoP, current US\)</span>)</th>
+<th align="right">GDP per capita (current US<span class="math inline">\()| GDP growth (annual %)| Fuel exports (% of merchandise exports)| Food imports (% of merchandise imports)| External debt stocks (% of GNI)| Exports of goods and services (current US\)</span>)</th>
+<th align="right">Employment in industry (% of total employment) (modeled ILO estimate)</th>
+<th align="right">Employment in services (% of total employment) (modeled ILO estimate)</th>
+<th align="right">Employment in agriculture (% of total employment) (modeled ILO estimate)</th>
+<th align="right">Employers, total (% of total employment) (modeled ILO estimate)</th>
+<th align="right">Electricity production from renewable sources, excluding hydroelectric (kWh)</th>
+<th align="right">Electricity production from renewable sources, excluding hydroelectric (% of total)</th>
+<th align="right">Electricity production from oil, gas and coal sources (% of total)</th>
+<th align="right">Electricity production from coal sources (% of total)</th>
+<th align="right">Electricity production from hydroelectric sources (% of total)</th>
+<th align="right">Electricity production from natural gas sources (% of total)</th>
+<th align="right">Electricity production from nuclear sources (% of total)</th>
+<th align="right">Ease of doing business score (0 = lowest performance to 100 = best performance)</th>
+<th align="right">Diabetes prevalence (% of population ages 20 to 79)</th>
+<th align="right">Deposit interest rate (%)</th>
+<th align="right">Current health expenditure per capita (current US$)</th>
+<th align="right">Current health expenditure (% of GDP)</th>
+<th align="right">Consumer price index (2010 = 100)</th>
+<th align="right">CO2 emissions from solid fuel consumption (% of total)</th>
+<th align="right">CO2 emissions from solid fuel consumption (kt)</th>
+<th align="right">CO2 emissions from transport (% of total fuel combustion)</th>
+<th align="right">CO2 intensity (kg per kg of oil equivalent energy use)</th>
+<th align="right">CO2 emissions from residential buildings and commercial and public services (% of total fuel combustion)</th>
+<th align="right">CO2 emissions from other sectors, excluding residential buildings and commercial and public services (% of total fuel combustion)</th>
+<th align="right">CO2 emissions from manufacturing industries and construction (% of total fuel combustion)</th>
+<th align="right">CO2 emissions from liquid fuel consumption (kt)</th>
+<th align="right">CO2 emissions from liquid fuel consumption (% of total)</th>
+<th align="right">CO2 emissions from gaseous fuel consumption (kt)</th>
+<th align="right">CO2 emissions from gaseous fuel consumption (% of total)</th>
+<th align="right">CO2 emissions from electricity and heat production, total (% of total fuel combustion)</th>
+<th align="right">CO2 emissions (metric tons per capita)</th>
+<th align="right">CO2 emissions (kt)</th>
+<th align="right">CO2 emissions (kg per PPP $ of GDP)</th>
+<th align="right">CO2 emissions (kg per 2017 PPP $ of GDP)</th>
+<th align="right">CO2 emissions (kg per 2010 US$ of GDP)</th>
+<th align="right">Birth rate, crude (per 1,000 people)</th>
+<th align="right">Bank capital to assets ratio (%)</th>
+<th align="right">Average number of visits or required meetings with tax officials (for affected firms)</th>
+<th align="right">Average precipitation in depth (mm per year)</th>
+<th align="right">Automated teller machines (ATMs) (per 100,000 adults)</th>
+<th align="right">Account ownership at a financial institution or with a mobile-money-service provider (% of population ages 15+)</th>
+<th align="right">Access to electricity (% of population)</th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Afghanistan</td>
-<td align="left">1970 [YR1970]</td>
 <td align="right">5.748488</td>
-<td align="right">11.643</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
-<td align="right">21.72811</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">0.3028816</td>
+<td align="right">14306.62</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">5021</td>
+<td align="right">NA</td>
+<td align="right">9872705</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">23.13762</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">7</td>
+<td align="right">NA</td>
+<td align="right">49.01378</td>
+<td align="right">NA</td>
+<td align="right">36.27283</td>
+<td align="right">471891</td>
+<td align="right">44.32524</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">164463</td>
+<td align="right">1600100000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">10711736612</td>
+<td align="right">0.0000000</td>
+<td align="right">NA</td>
+<td align="right">1166.628</td>
+<td align="right">33.71281</td>
+<td align="right">NA</td>
+<td align="right">37.409</td>
+<td align="right">NA</td>
+<td align="right">652860</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">11.94411</td>
+<td align="right">NA</td>
+<td align="right">1786664529</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">156.5188</td>
+<td align="right">NA</td>
+<td align="right">16.94615</td>
+<td align="right">20.54160</td>
+<td align="right">NA</td>
+<td align="right">171111104</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">26.09649</td>
+<td align="right">436.373</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">671.061</td>
+<td align="right">40.13158</td>
+<td align="right">216.353</td>
+<td align="right">12.93860</td>
+<td align="right">NA</td>
+<td align="right">0.1496513</td>
+<td align="right">1672.152</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">51.502</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 </tr>
 <tr class="even">
-<td align="left">Afghanistan</td>
-<td align="left">1971 [YR1971]</td>
 <td align="right">5.860102</td>
-<td align="right">12.021</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
-<td align="right">27.06314</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">0.3739563</td>
+<td align="right">14391.78</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">5953</td>
+<td align="right">NA</td>
+<td align="right">10095986</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">22.52125</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">7</td>
+<td align="right">NA</td>
+<td align="right">49.06212</td>
+<td align="right">NA</td>
+<td align="right">35.90547</td>
+<td align="right">495303</td>
+<td align="right">44.67150</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">165306</td>
+<td align="right">1700000000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">11670336612</td>
+<td align="right">0.0000000</td>
+<td align="right">NA</td>
+<td align="right">1178.829</td>
+<td align="right">42.71271</td>
+<td align="right">NA</td>
+<td align="right">37.930</td>
+<td align="right">NA</td>
+<td align="right">652860</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">16.14080</td>
+<td align="right">NA</td>
+<td align="right">1926664351</td>
+<td align="right">1.16036</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">159.5675</td>
+<td align="right">NA</td>
+<td align="right">14.55330</td>
+<td align="right">25.43237</td>
+<td align="right">NA</td>
+<td align="right">199999989</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">18.95551</td>
+<td align="right">359.366</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">748.068</td>
+<td align="right">39.45841</td>
+<td align="right">440.040</td>
+<td align="right">23.21083</td>
+<td align="right">NA</td>
+<td align="right">0.1652082</td>
+<td align="right">1895.839</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">51.411</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 </tr>
 <tr class="odd">
-<td align="left">Afghanistan</td>
-<td align="left">1972 [YR1972]</td>
 <td align="right">5.899299</td>
-<td align="right">12.410</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
-<td align="right">32.86908</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">0.4352624</td>
+<td align="right">13040.85</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">7053</td>
+<td align="right">NA</td>
+<td align="right">10327931</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">21.70140</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">7</td>
+<td align="right">NA</td>
+<td align="right">49.10710</td>
+<td align="right">NA</td>
+<td align="right">36.11776</td>
+<td align="right">528508</td>
+<td align="right">44.93724</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">166120</td>
+<td align="right">1599900000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">13556437512</td>
+<td align="right">0.0041971</td>
+<td align="right">NA</td>
+<td align="right">1262.196</td>
+<td align="right">35.24140</td>
+<td align="right">NA</td>
+<td align="right">38.461</td>
+<td align="right">NA</td>
+<td align="right">652860</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">18.10585</td>
+<td align="right">NA</td>
+<td align="right">1648888947</td>
+<td align="right">1.11718</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">135.3172</td>
+<td align="right">NA</td>
+<td align="right">13.73092</td>
+<td align="right">28.46417</td>
+<td align="right">NA</td>
+<td align="right">235555544</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">12.44019</td>
+<td align="right">190.684</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">627.057</td>
+<td align="right">40.90909</td>
+<td align="right">300.694</td>
+<td align="right">19.61722</td>
+<td align="right">NA</td>
+<td align="right">0.1299955</td>
+<td align="right">1532.806</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">51.303</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">327</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 </tr>
 <tr class="even">
-<td align="left">Afghanistan</td>
-<td align="left">1973 [YR1973]</td>
 <td align="right">5.823573</td>
-<td align="right">12.809</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
-<td align="right">27.69231</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">0.8714832</td>
+<td align="right">13535.75</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">8061</td>
+<td align="right">NA</td>
+<td align="right">10557926</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">20.51185</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">7</td>
+<td align="right">NA</td>
+<td align="right">49.14641</td>
+<td align="right">NA</td>
+<td align="right">36.95341</td>
+<td align="right">573161</td>
+<td align="right">45.13807</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">166562</td>
+<td align="right">1699900000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">13941837512</td>
+<td align="right">0.0479294</td>
+<td align="right">NA</td>
+<td align="right">1173.216</td>
+<td align="right">29.77436</td>
+<td align="right">NA</td>
+<td align="right">39.003</td>
+<td align="right">NA</td>
+<td align="right">652860</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">14.74359</td>
+<td align="right">NA</td>
+<td align="right">1764444431</td>
+<td align="right">1.42788</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">143.1446</td>
+<td align="right">NA</td>
+<td align="right">11.61954</td>
+<td align="right">23.86529</td>
+<td align="right">NA</td>
+<td align="right">224444438</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">19.01566</td>
+<td align="right">311.695</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">704.064</td>
+<td align="right">42.95302</td>
+<td align="right">333.697</td>
+<td align="right">20.35794</td>
+<td align="right">NA</td>
+<td align="right">0.1353666</td>
+<td align="right">1639.149</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">51.184</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 </tr>
 <tr class="odd">
-<td align="left">Afghanistan</td>
-<td align="left">1974 [YR1974]</td>
 <td align="right">5.630224</td>
-<td align="right">13.219</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
-<td align="right">28.86598</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1.1527195</td>
+<td align="right">14945.97</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">7866</td>
+<td align="right">NA</td>
+<td align="right">10772091</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">21.96758</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">7</td>
+<td align="right">NA</td>
+<td align="right">49.17745</td>
+<td align="right">NA</td>
+<td align="right">37.88578</td>
+<td align="right">621656</td>
+<td align="right">45.27967</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">166690</td>
+<td align="right">2100000000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">15681237512</td>
+<td align="right">0.1701138</td>
+<td align="right">NA</td>
+<td align="right">1304.340</td>
+<td align="right">24.15658</td>
+<td align="right">NA</td>
+<td align="right">39.558</td>
+<td align="right">NA</td>
+<td align="right">652860</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">14.84536</td>
+<td align="right">NA</td>
+<td align="right">2173333344</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">173.6536</td>
+<td align="right">NA</td>
+<td align="right">13.97424</td>
+<td align="right">22.88171</td>
+<td align="right">NA</td>
+<td align="right">302222222</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">15.86998</td>
+<td align="right">304.361</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">770.070</td>
+<td align="right">40.15296</td>
+<td align="right">399.703</td>
+<td align="right">20.84130</td>
+<td align="right">NA</td>
+<td align="right">0.1545031</td>
+<td align="right">1917.841</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">51.058</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 </tr>
 <tr class="even">
-<td align="left">Afghanistan</td>
-<td align="left">1975 [YR1975]</td>
 <td align="right">5.343228</td>
-<td align="right">13.641</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
-<td align="right">26.94836</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1.6405264</td>
+<td align="right">14574.16</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">10958235</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">7</td>
+<td align="right">NA</td>
+<td align="right">49.19860</td>
+<td align="right">NA</td>
+<td align="right">38.95330</td>
+<td align="right">674254</td>
+<td align="right">45.35050</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">166442</td>
+<td align="right">2300000000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">15551937512</td>
+<td align="right">0.4362939</td>
+<td align="right">NA</td>
+<td align="right">1298.326</td>
+<td align="right">29.40127</td>
+<td align="right">NA</td>
+<td align="right">40.128</td>
+<td align="right">NA</td>
+<td align="right">652860</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">14.27230</td>
+<td align="right">NA</td>
+<td align="right">2404444524</td>
+<td align="right">1.30332</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">186.5108</td>
+<td align="right">NA</td>
+<td align="right">20.29962</td>
+<td align="right">24.42357</td>
+<td align="right">NA</td>
+<td align="right">300000007</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">18.79310</td>
+<td align="right">399.703</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">876.413</td>
+<td align="right">41.20690</td>
+<td align="right">476.710</td>
+<td align="right">22.41379</td>
+<td align="right">NA</td>
+<td align="right">0.1676123</td>
+<td align="right">2126.860</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">50.930</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div id="gdp" class="section level2">
 <h2>GDP</h2>
 <pre class="r"><code>ggplot(
   cleanedWorldDevelopmentIndicatorsResult, 
   aes(x=year, 
-      y=`Trade (% of GDP)`)
+      y=`Trade (% of GDP)`,
+      group=1)
 ) +
 geom_line() +
-geom_smooth() + 
 facet_grid(`Country Name` ~ .)</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 2894 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 77 row(s) containing missing values (geom_path).</code></pre>
-<pre><code>## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?</code></pre>
-<pre><code>## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?</code></pre>
-<p><img src="data:image/png;base64,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" width="672" /></p>
+<pre><code>## Warning: Removed 2 row(s) containing missing values (geom_path).</code></pre>
+<p><img src="data:image/png;base64,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" width="672" /></p>
 </div>
 
 

@@ -23,13 +23,15 @@ library("readxl")
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(mlbench)
+library(caret)
 ```
 
 ## Wczytanie danych z pliku
 
 Ścieżka do folderu z danymi
 
-```{r}
+```{r savePath}
 dataDirectoryPath <- 'C:/Users/anna/OneDrive/Nauka/II semestr II stopień/Zaawansowana Eksploracja Danych/Data pack/Data pack/'
 ```
 
@@ -62,14 +64,14 @@ worldDevelopmentIndicators <- read_excel(worldDevelopmentIndicatorsPath)
 
 ## Podsumowanie danych 
 
-```{r}
+```{r summary}
 knitr::kable(summary(worldDevelopmentIndicators))
 knitr::kable(head(worldDevelopmentIndicators))
 ```
 
 ## Czyszczenie danych
 
-```{r}
+```{r clean dataset}
 cleanedWorldDevelopmentIndicators <- worldDevelopmentIndicators[1:42600,]
 cleanedWorldDevelopmentIndicators <- cleanedWorldDevelopmentIndicators %>% 
   mutate_at(vars(!c('Country Name', 'Country Code', 'Series Name', 'Series Code')), as.numeric) %>%
@@ -78,8 +80,18 @@ knitr::kable(head(cleanedWorldDevelopmentIndicators))
 
 cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicators %>% 
   pivot_wider(names_from = c('Series Name', 'Series Code'), values_from = 'value',  names_glue = "{`Series Name`}") %>%
-  select(`Country Name`, year, `Urban population growth (annual %)`, `Urban population (% of total population)`, `Unemployment, total (% of total labor force) (national estimate)`, `Trade in services (% of GDP)`, `Trade (% of GDP)`)
-knitr::kable(head(cleanedWorldDevelopmentIndicatorsResult))
+  mutate_at(vars(year), as.factor)
+
+```
+
+### Szukanie najlepszych features
+```{r best_features}
+correlationMatrix <- cor(cleanedWorldDevelopmentIndicatorsResult[,4:211],use="pairwise.complete.obs")
+correlationMatrix<-correlationMatrix[,colSums(is.na(correlationMatrix))==0]
+highlyCorrelated <- findCorrelation(correlationMatrix, cutoff=0.5)
+highlyCorrelated = sort(highlyCorrelated)
+reduced_Data = cleanedWorldDevelopmentIndicatorsResult[,-c(highlyCorrelated)]
+knitr::kable(head(reduced_Data))
 
 ```
 
@@ -88,9 +100,9 @@ knitr::kable(head(cleanedWorldDevelopmentIndicatorsResult))
 ggplot(
   cleanedWorldDevelopmentIndicatorsResult, 
   aes(x=year, 
-      y=`Trade (% of GDP)`)
+      y=`Trade (% of GDP)`,
+      group=1)
 ) +
 geom_line() +
-geom_smooth() + 
 facet_grid(`Country Name` ~ .)
 ```
