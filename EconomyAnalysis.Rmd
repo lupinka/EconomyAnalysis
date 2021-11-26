@@ -69,22 +69,48 @@ knitr::kable(summary(worldDevelopmentIndicators))
 knitr::kable(head(worldDevelopmentIndicators))
 ```
 
-## Czyszczenie danych
+## Czyszczenie danych worldDevelopmentIndicators
 
 ```{r clean dataset}
-cleanedWorldDevelopmentIndicators <- worldDevelopmentIndicators[1:42600,]
+cleanedWorldDevelopmentIndicators <- worldDevelopmentIndicators[c(1:42600, 43666:43878),]
 cleanedWorldDevelopmentIndicators <- cleanedWorldDevelopmentIndicators %>% 
   mutate_at(vars(!c('Country Name', 'Country Code', 'Series Name', 'Series Code')), as.numeric) %>%
   pivot_longer(!c('Country Name', 'Country Code', 'Series Name', 'Series Code'), names_to = "year", values_to="value")
-knitr::kable(head(cleanedWorldDevelopmentIndicators))
-
+cleanedWorldDevelopmentIndicators$year <- substr(cleanedWorldDevelopmentIndicators$year,1,4)
 cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicators %>% 
   pivot_wider(names_from = c('Series Name', 'Series Code'), values_from = 'value',  names_glue = "{`Series Name`}") %>%
-  mutate_at(vars(year), as.factor)
+  mutate_at(vars(year), as.numeric)
+knitr::kable(head(cleanedWorldDevelopmentIndicatorsResult))
 
 ```
 
-### Szukanie najlepszych features
+## Operacje na zbiorze goldPrices
+```{r clean goldPrices}
+goldPricesYearly <- goldPrices
+goldPricesYearly$year <- substr(goldPrices$Date,1,4)
+goldPricesYearly <- group_by(goldPricesYearly, year)
+goldPricesYearly <- summarize(goldPricesYearly, 
+                              gold_usd = mean(`USD..AM.`, na.rm=TRUE),
+                              gold_gbp = mean(`GBP..AM.`, na.rm=TRUE),
+                              gold_euro = mean(`EURO..AM.`, na.rm=TRUE))
+knitr::kable(head(goldPricesYearly))
+ggplot(
+  goldPricesYearly, 
+  aes(x=year, 
+      y=gold_usd,
+      group=1)
+) +
+geom_line()
+```
+
+## Wpływ światowego rozwoju na ceny złota
+```{r whole-world}
+worldIndicatorsForWholeWorld <- cleanedWorldDevelopmentIndicatorsResult %>%
+  filter(`Country Name` == 'World')
+goldPricesAndWorldIndicators <- merge(x=worldIndicatorsForWholeWorld, y=goldPricesYearly, by='year')
+knitr::kable(head(goldPricesAndWorldIndicators))
+```
+## Szukanie najlepszych features
 ```{r best_features}
 correlationMatrix <- cor(cleanedWorldDevelopmentIndicatorsResult[,4:211],use="pairwise.complete.obs")
 correlationMatrix<-correlationMatrix[,colSums(is.na(correlationMatrix))==0]
