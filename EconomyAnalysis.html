@@ -251,6 +251,13 @@ r[&quot;CRAN&quot;] = &quot;http://cran.us.r-project.org&quot;
 options(repos = r)
 install.packages(&quot;readxl&quot;)</code></pre>
 <pre><code>## Warning: pakiet &#39;readxl&#39; jest w użyciu i nie zostanie zainstalowany</code></pre>
+<pre class="r"><code>install.packages(&quot;missForest&quot;)</code></pre>
+<pre><code>## Instalowanie pakietu w &#39;C:/Users/anna/OneDrive/Dokumenty/R/win-library/4.1&#39;
+## (ponieważ &#39;lib&#39; nie jest określony)</code></pre>
+<pre><code>## package &#39;missForest&#39; successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\anna\AppData\Local\Temp\RtmpWqLyUQ\downloaded_packages</code></pre>
 <pre class="r"><code>library(&quot;readxl&quot;)
 library(dplyr)</code></pre>
 <pre><code>## 
@@ -266,6 +273,23 @@ library(ggplot2)
 library(mlbench)
 library(caret)</code></pre>
 <pre><code>## Ładowanie wymaganego pakietu: lattice</code></pre>
+<pre class="r"><code>library(missForest)</code></pre>
+<pre><code>## Warning: pakiet &#39;missForest&#39; został zbudowany w wersji R 4.1.2</code></pre>
+<pre><code>## Ładowanie wymaganego pakietu: randomForest</code></pre>
+<pre><code>## randomForest 4.6-14</code></pre>
+<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<pre><code>## 
+## Dołączanie pakietu: &#39;randomForest&#39;</code></pre>
+<pre><code>## Następujący obiekt został zakryty z &#39;package:ggplot2&#39;:
+## 
+##     margin</code></pre>
+<pre><code>## Następujący obiekt został zakryty z &#39;package:dplyr&#39;:
+## 
+##     combine</code></pre>
+<pre><code>## Ładowanie wymaganego pakietu: foreach</code></pre>
+<pre><code>## Ładowanie wymaganego pakietu: itertools</code></pre>
+<pre><code>## Warning: pakiet &#39;itertools&#39; został zbudowany w wersji R 4.1.2</code></pre>
+<pre><code>## Ładowanie wymaganego pakietu: iterators</code></pre>
 </div>
 <div id="wczytanie-danych-z-pliku" class="section level2">
 <h2>Wczytanie danych z pliku</h2>
@@ -3032,1760 +3056,330 @@ geom_line()</code></pre>
 <h2>Wpływ światowego rozwoju na ceny złota</h2>
 <pre class="r"><code>worldIndicatorsForWholeWorld &lt;- cleanedWorldDevelopmentIndicatorsResult %&gt;%
   filter(`Country Name` == &#39;World&#39;)
-knitr::kable(head(worldIndicatorsForWholeWorld))</code></pre>
-<table style="width:100%;">
-<colgroup>
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="1%" />
-<col width="1%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="0%" />
-<col width="1%" />
-<col width="0%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Country Name</th>
-<th align="left">Country Code</th>
-<th align="right">year</th>
-<th align="right">Urban population growth (annual %)</th>
-<th align="right">Urban population (% of total population)</th>
-<th align="right">Value lost due to electrical outages (% of sales for affected firms)</th>
-<th align="right">Urban population</th>
-<th align="right">Urban land area (sq. km)</th>
-<th align="right">Unemployment, total (% of total labor force) (national estimate)</th>
-<th align="right">Unemployment with advanced education (% of total labor force with advanced education)</th>
-<th align="right">Transport services (% of commercial service exports)</th>
-<th align="right">Transport services (% of commercial service imports)</th>
-<th align="right">Trained teachers in upper secondary education (% of total teachers)</th>
-<th align="right">Trained teachers in secondary education (% of total teachers)</th>
-<th align="right">Trained teachers in primary education (% of total teachers)</th>
-<th align="right">Trademark applications, direct nonresident</th>
-<th align="right">Trade in services (% of GDP)</th>
-<th align="right">Trade (% of GDP)</th>
-<th align="right">Trademark applications, direct resident</th>
-<th align="right">Trademark applications, total</th>
-<th align="right">Total natural resources rents (% of GDP)</th>
-<th align="right">Total greenhouse gas emissions (kt of CO2 equivalent)</th>
-<th align="right">Total greenhouse gas emissions (% change from 1990)</th>
-<th align="right">Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)</th>
-<th align="right">Time required to build a warehouse (days)</th>
-<th align="right">Time required to enforce a contract (days)</th>
-<th align="right">Time required to get electricity (days)</th>
-<th align="right">Taxes on goods and services (current LCU)</th>
-<th align="right">Taxes on income, profits and capital gains (% of revenue)</th>
-<th align="right">Taxes on income, profits and capital gains (% of total taxes)</th>
-<th align="right">Taxes on income, profits and capital gains (current LCU)</th>
-<th align="right">Taxes on international trade (% of revenue)</th>
-<th align="right">Taxes on international trade (current LCU)</th>
-<th align="right">Taxes on goods and services (% value added of industry and services)</th>
-<th align="right">Taxes on goods and services (% of revenue)</th>
-<th align="right">Taxes on exports (current LCU)</th>
-<th align="right">Taxes on exports (% of tax revenue)</th>
-<th align="right">Taxes less subsidies on products (current US<span class="math inline">\()| Taxes less subsidies on products (current LCU)| Taxes less subsidies on products (constant LCU)| Tax revenue (current LCU)| Tax revenue (% of GDP)| Tax payments (number)| Survival to age 65, female (% of cohort)| Survival to age 65, male (% of cohort)| Suicide mortality rate (per 100,000 population)| Suicide mortality rate, female (per 100,000 female population)| Suicide mortality rate, male (per 100,000 male population)| Stocks traded, turnover ratio of domestic shares (%)| Stocks traded, total value (current US\)</span>)</th>
-<th align="right">Stocks traded, total value (% of GDP)</th>
-<th align="right">Strength of legal rights index (0=weak to 12=strong)</th>
-<th align="right">Short-term debt (% of total reserves)</th>
-<th align="right">Short-term debt (% of total external debt)</th>
-<th align="right">Short-term debt (% of exports of goods, services and primary income)</th>
-<th align="right">Share of youth not in education, employment or training, female (% of female youth population)</th>
-<th align="right">Share of youth not in education, employment or training, male (% of male youth population)</th>
-<th align="right">Share of youth not in education, employment or training, total (% of youth population)</th>
-<th align="right">Services, value added (% of GDP)</th>
-<th align="right">Service imports (BoP, current US<span class="math inline">\()| Service exports (BoP, current US\)</span>)</th>
-<th align="right">Self-employed, male (% of male employment) (modeled ILO estimate)</th>
-<th align="right">Self-employed, total (% of total employment) (modeled ILO estimate)</th>
-<th align="right">Self-employed, female (% of female employment) (modeled ILO estimate)</th>
-<th align="right">Secure Internet servers</th>
-<th align="right">Secure Internet servers (per 1 million people)</th>
-<th align="right">Secondary education, teachers</th>
-<th align="right">Secondary education, pupils</th>
-<th align="right">Scientific and technical journal articles</th>
-<th align="right">School enrollment, tertiary (gross), gender parity index (GPI)</th>
-<th align="right">S&amp;P Global Equity Indices (annual % change)</th>
-<th align="right">Rural population growth (annual %)</th>
-<th align="right">Rural population (% of total population)</th>
-<th align="right">Rural population</th>
-<th align="right">Researchers in R&amp;D (per million people)</th>
-<th align="right">Research and development expenditure (% of GDP)</th>
-<th align="right">Renewable energy consumption (% of total final energy consumption)</th>
-<th align="right">Renewable internal freshwater resources per capita (cubic meters)</th>
-<th align="right">Renewable internal freshwater resources, total (billion cubic meters)</th>
-<th align="right">Renewable electricity output (% of total electricity output)</th>
-<th align="right">Real interest rate (%)</th>
-<th align="right">Pupil-teacher ratio, upper secondary</th>
-<th align="right">Pupil-teacher ratio, tertiary</th>
-<th align="right">Pupil-teacher ratio, secondary</th>
-<th align="right">Pupil-teacher ratio, primary</th>
-<th align="right">Pupil-teacher ratio, preprimary</th>
-<th align="right">Rail lines (total route-km)</th>
-<th align="right">Railways, goods transported (million ton-km)</th>
-<th align="right">Railways, passengers carried (million passenger-km)</th>
-<th align="right">Proportion of seats held by women in national parliaments (%)</th>
-<th align="right">Primary income payments (BoP, current US<span class="math inline">\()| Primary income receipts (BoP, current US\)</span>)</th>
-<th align="right">Primary school starting age (years)</th>
-<th align="right">Prevalence of undernourishment (% of population)</th>
-<th align="right">Portfolio investment, net (BoP, current US<span class="math inline">\()| Portfolio investment, bonds (PPG + PNG) (NFL, current US\)</span>)</th>
-<th align="right">Portfolio equity, net inflows (BoP, current US<span class="math inline">\()| Population, total| Population, male| Population, male (% of total population)| Population, female (% of total population)| Population, female| Population living in slums (% of urban population)| Population in urban agglomerations of more than 1 million| Population in the largest city (% of urban population)| Population in largest city| Population growth (annual %)| Population density (people per sq. km of land area)| Population ages 65 and above (% of total population)| Population ages 15-64 (% of total population)| Population ages 0-14 (% of total population)| PM2.5 air pollution, mean annual exposure (micrograms per cubic meter)| PM2.5 air pollution, population exposed to levels exceeding WHO guideline value (% of total)| PM2.5 pollution, population exposed to levels exceeding WHO Interim Target-1 value (% of total)| PM2.5 pollution, population exposed to levels exceeding WHO Interim Target-2 value (% of total)| PM2.5 pollution, population exposed to levels exceeding WHO Interim Target-3 value (% of total)| Part time employment, total (% of total employment)| Patent applications, nonresidents| Patent applications, residents| Number of under-five deaths| Nitrous oxide emissions (% change from 1990)| Nitrous oxide emissions (thousand metric tons of CO2 equivalent)| Nitrous oxide emissions in energy sector (% of total)| Net primary income (Net income from abroad) (current US\)</span>)</th>
-<th align="right">Net primary income (Net income from abroad) (current LCU)</th>
-<th align="right">Net primary income (Net income from abroad) (constant LCU)</th>
-<th align="right">Net primary income (BoP, current US<span class="math inline">\()| Net official development assistance received (current US\)</span>)</th>
-<th align="right">Net official aid received (current US<span class="math inline">\()| Net domestic credit (current LCU)| Net acquisition of financial assets (% of GDP)| Natural gas rents (% of GDP)| Mortality rate, infant (per 1,000 live births)| Mortality caused by road traffic injury (per 100,000 population)| Methane emissions (% change from 1990)| Methane emissions (kt of CO2 equivalent)| Methane emissions in energy sector (thousand metric tons of CO2 equivalent)| Merchandise exports to high-income economies (% of total merchandise exports)| Manufacturing, value added (% of GDP)| Literacy rate, adult total (% of people ages 15 and above)| Life expectancy at birth, total (years)| Lending interest rate (%)| Land area (sq. km)| Labor force, total| International tourism, expenditures (current US\)</span>)</th>
-<th align="right">International migrant stock (% of population)</th>
-<th align="right">Interest payments (% of expense)</th>
-<th align="right">Inflation, consumer prices (annual %)</th>
-<th align="right">Individuals using the Internet (% of population)</th>
-<th align="right">Income share held by highest 10%</th>
-<th align="right">Imports of goods and services (current US<span class="math inline">\()| Imports of goods and services (% of GDP)| ICT goods exports (% of total goods exports)| Gross savings (% of GDP)| Gross national expenditure (% of GDP)| Gross national expenditure (current US\)</span>)</th>
-<th align="right">Gross savings (current US<span class="math inline">\()| Gross domestic savings (% of GDP)| Gross domestic savings (current US\)</span>)</th>
-<th align="right">Government expenditure on education, total (% of GDP)</th>
-<th align="right">Goods exports (BoP, current US<span class="math inline">\()| Goods imports (BoP, current US\)</span>)</th>
-<th align="right">GNI growth (annual %)</th>
-<th align="right">GDP per capita (current US<span class="math inline">\()| GDP per capita growth (annual %)| GDP growth (annual %)| GDP (current US\)</span>)</th>
-<th align="right">Fuel exports (% of merchandise exports)</th>
-<th align="right">Fuel imports (% of merchandise imports)</th>
-<th align="right">Food exports (% of merchandise exports)</th>
-<th align="right">Food imports (% of merchandise imports)</th>
-<th align="right">External debt stocks (% of GNI)</th>
-<th align="right">Exports of goods and services (current US<span class="math inline">\()| Exports of goods and services (annual % growth)| Expense (% of GDP)| Employment in industry (% of total employment) (modeled ILO estimate)| Employment in services (% of total employment) (modeled ILO estimate)| Employment in agriculture (% of total employment) (modeled ILO estimate)| Employers, total (% of total employment) (modeled ILO estimate)| Electricity production from renewable sources, excluding hydroelectric (kWh)| Electricity production from renewable sources, excluding hydroelectric (% of total)| Electricity production from oil, gas and coal sources (% of total)| Electricity production from coal sources (% of total)| Electricity production from hydroelectric sources (% of total)| Electricity production from natural gas sources (% of total)| Electricity production from nuclear sources (% of total)| Ease of doing business score (0 = lowest performance to 100 = best performance)| Diabetes prevalence (% of population ages 20 to 79)| Deposit interest rate (%)| Current health expenditure per capita (current US\)</span>)</th>
-<th align="right">Current health expenditure (% of GDP)</th>
-<th align="right">Consumer price index (2010 = 100)</th>
-<th align="right">CO2 emissions from solid fuel consumption (% of total)</th>
-<th align="right">CO2 emissions from solid fuel consumption (kt)</th>
-<th align="right">CO2 emissions from transport (% of total fuel combustion)</th>
-<th align="right">CO2 intensity (kg per kg of oil equivalent energy use)</th>
-<th align="right">CO2 emissions from residential buildings and commercial and public services (% of total fuel combustion)</th>
-<th align="right">CO2 emissions from other sectors, excluding residential buildings and commercial and public services (% of total fuel combustion)</th>
-<th align="right">CO2 emissions from manufacturing industries and construction (% of total fuel combustion)</th>
-<th align="right">CO2 emissions from liquid fuel consumption (kt)</th>
-<th align="right">CO2 emissions from liquid fuel consumption (% of total)</th>
-<th align="right">CO2 emissions from gaseous fuel consumption (kt)</th>
-<th align="right">CO2 emissions from gaseous fuel consumption (% of total)</th>
-<th align="right">CO2 emissions from electricity and heat production, total (% of total fuel combustion)</th>
-<th align="right">CO2 emissions (metric tons per capita)</th>
-<th align="right">CO2 emissions (kt)</th>
-<th align="right">CO2 emissions (kg per PPP $ of GDP)</th>
-<th align="right">CO2 emissions (kg per 2017 PPP $ of GDP)</th>
-<th align="right">CO2 emissions (kg per 2010 US$ of GDP)</th>
-<th align="right">Birth rate, crude (per 1,000 people)</th>
-<th align="right">Bank capital to assets ratio (%)</th>
-<th align="right">Average number of visits or required meetings with tax officials (for affected firms)</th>
-<th align="right">Average precipitation in depth (mm per year)</th>
-<th align="right">Automated teller machines (ATMs) (per 100,000 adults)</th>
-<th align="right">Account ownership at a financial institution or with a mobile-money-service provider (% of population ages 15+)</th>
-<th align="right">Access to electricity (% of population)</th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">World</td>
-<td align="left">WLD</td>
-<td align="right">1970</td>
-<td align="right">2.621056</td>
-<td align="right">36.55435</td>
-<td align="right">NA</td>
-<td align="right">1345474754</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">26.54325</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1.079882</td>
-<td align="right">27057172</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">61.81512</td>
-<td align="right">52.75011</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">11500000</td>
-<td align="right">183000000</td>
-<td align="right">NA</td>
-<td align="right">0.73874</td>
-<td align="right">NA</td>
-<td align="right">1.788342</td>
-<td align="right">63.44565</td>
-<td align="right">2335276447</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">15.92385</td>
-<td align="right">28.10500</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1362527409</td>
-<td align="right">3681975908</td>
-<td align="right">1845234090</td>
-<td align="right">50.13942</td>
-<td align="right">49.86058</td>
-<td align="right">1834971939</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">18.05472</td>
-<td align="right">NA</td>
-<td align="right">2.091253</td>
-<td align="right">28.35414</td>
-<td align="right">5.301563</td>
-<td align="right">57.15222</td>
-<td align="right">37.54622</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">2202798</td>
-<td align="right">8.352173</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">6574020020</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.0069029</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">5294459</td>
-<td align="right">1484335</td>
-<td align="right">74.46038</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">58.57976</td>
-<td align="right">NA</td>
-<td align="right">129856730</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">382798148878</td>
-<td align="right">13.27915</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">3037678778813</td>
-<td align="right">NA</td>
-<td align="right">26.43754</td>
-<td align="right">768147210657</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">811.3490</td>
-<td align="right">1.428253</td>
-<td align="right">3.5493743</td>
-<td align="right">2987367650130</td>
-<td align="right">7.438957</td>
-<td align="right">9.317989</td>
-<td align="right">17.23696</td>
-<td align="right">15.34045</td>
-<td align="right">NA</td>
-<td align="right">382964642982</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">10627000000</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">37.48596</td>
-<td align="right">5845581</td>
-<td align="right">19.06248</td>
-<td align="right">2.855011</td>
-<td align="right">19.89445</td>
-<td align="right">2.017242</td>
-<td align="right">26.03782</td>
-<td align="right">6510868</td>
-<td align="right">45.11015</td>
-<td align="right">2075285</td>
-<td align="right">13.32248</td>
-<td align="right">32.98823</td>
-<td align="right">4.147851</td>
-<td align="right">15272289</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.8004473</td>
-<td align="right">32.37663</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">World</td>
-<td align="left">WLD</td>
-<td align="right">1971</td>
-<td align="right">2.677274</td>
-<td align="right">36.74913</td>
-<td align="right">NA</td>
-<td align="right">1381496807</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">26.67065</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1.050447</td>
-<td align="right">25652776</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">62.65088</td>
-<td align="right">53.56179</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">12200000</td>
-<td align="right">198000000</td>
-<td align="right">NA</td>
-<td align="right">0.72778</td>
-<td align="right">NA</td>
-<td align="right">1.819509</td>
-<td align="right">63.25087</td>
-<td align="right">2377767005</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">16.24282</td>
-<td align="right">28.23694</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">2254661701</td>
-<td align="right">3760516757</td>
-<td align="right">1885029034</td>
-<td align="right">50.15095</td>
-<td align="right">49.84905</td>
-<td align="right">1873681546</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">18.09476</td>
-<td align="right">NA</td>
-<td align="right">2.133117</td>
-<td align="right">28.95897</td>
-<td align="right">5.368717</td>
-<td align="right">57.16514</td>
-<td align="right">37.46615</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">2065703</td>
-<td align="right">6.508739</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">7489750000</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.0114749</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">5133799</td>
-<td align="right">1475413</td>
-<td align="right">74.56152</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">59.11046</td>
-<td align="right">NA</td>
-<td align="right">129856720</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">425907499898</td>
-<td align="right">13.21928</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">3366186349526</td>
-<td align="right">NA</td>
-<td align="right">26.04150</td>
-<td align="right">832105373296</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">877.6527</td>
-<td align="right">2.162125</td>
-<td align="right">4.3413627</td>
-<td align="right">3300427658080</td>
-<td align="right">7.939303</td>
-<td align="right">10.866721</td>
-<td align="right">17.28618</td>
-<td align="right">15.18923</td>
-<td align="right">NA</td>
-<td align="right">429269325877</td>
-<td align="right">6.297604</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">13198000000</td>
-<td align="right">0.2519160</td>
-<td align="right">61.68181</td>
-<td align="right">33.25829</td>
-<td align="right">20.21226</td>
-<td align="right">10.378640</td>
-<td align="right">2.003932</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">36.01597</td>
-<td align="right">5852169</td>
-<td align="right">18.86458</td>
-<td align="right">2.674849</td>
-<td align="right">18.61556</td>
-<td align="right">3.417997</td>
-<td align="right">27.25415</td>
-<td align="right">6896107</td>
-<td align="right">45.85347</td>
-<td align="right">2231486</td>
-<td align="right">13.74788</td>
-<td align="right">31.84789</td>
-<td align="right">4.231788</td>
-<td align="right">15913711</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.7993621</td>
-<td align="right">31.56896</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">World</td>
-<td align="left">WLD</td>
-<td align="right">1972</td>
-<td align="right">2.607189</td>
-<td align="right">36.95664</td>
-<td align="right">NA</td>
-<td align="right">1417515045</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">26.82526</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1.091594</td>
-<td align="right">27508882</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">63.47632</td>
-<td align="right">54.36442</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">12800000</td>
-<td align="right">210000000</td>
-<td align="right">NA</td>
-<td align="right">0.73481</td>
-<td align="right">NA</td>
-<td align="right">1.696322</td>
-<td align="right">63.04336</td>
-<td align="right">2418101600</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">10840.75</td>
-<td align="right">37824.51</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">16.45203</td>
-<td align="right">27.83600</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">4707239476</td>
-<td align="right">3836900801</td>
-<td align="right">1923739624</td>
-<td align="right">50.16198</td>
-<td align="right">49.83802</td>
-<td align="right">1911315351</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">18.13293</td>
-<td align="right">NA</td>
-<td align="right">2.031211</td>
-<td align="right">29.54721</td>
-<td align="right">5.427447</td>
-<td align="right">57.20584</td>
-<td align="right">37.36671</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">2220995</td>
-<td align="right">6.402548</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">7943260254</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.0225290</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">5348885</td>
-<td align="right">1513689</td>
-<td align="right">75.03225</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">59.59651</td>
-<td align="right">NA</td>
-<td align="right">129856620</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">502005838941</td>
-<td align="right">13.18060</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">3877101412505</td>
-<td align="right">NA</td>
-<td align="right">26.07936</td>
-<td align="right">970480260399</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">5.660900</td>
-<td align="right">991.8407</td>
-<td align="right">3.655481</td>
-<td align="right">5.7609427</td>
-<td align="right">3805594219042</td>
-<td align="right">8.807535</td>
-<td align="right">10.586475</td>
-<td align="right">17.21712</td>
-<td align="right">14.64250</td>
-<td align="right">NA</td>
-<td align="right">509195240931</td>
-<td align="right">8.947447</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">14055000000</td>
-<td align="right">0.2471020</td>
-<td align="right">61.65472</td>
-<td align="right">31.73240</td>
-<td align="right">19.72894</td>
-<td align="right">10.093576</td>
-<td align="right">2.518928</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">34.56721</td>
-<td align="right">5887318</td>
-<td align="right">19.11478</td>
-<td align="right">2.670673</td>
-<td align="right">18.43240</td>
-<td align="right">3.356644</td>
-<td align="right">26.62586</td>
-<td align="right">7432507</td>
-<td align="right">47.14922</td>
-<td align="right">2350297</td>
-<td align="right">13.81451</td>
-<td align="right">32.46948</td>
-<td align="right">4.347295</td>
-<td align="right">16680141</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.7922213</td>
-<td align="right">31.07081</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">World</td>
-<td align="left">WLD</td>
-<td align="right">1973</td>
-<td align="right">2.632268</td>
-<td align="right">37.19199</td>
-<td align="right">NA</td>
-<td align="right">1454827837</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">29.77236</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1.515936</td>
-<td align="right">28423385</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">64.18366</td>
-<td align="right">55.11120</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">13400000</td>
-<td align="right">220000000</td>
-<td align="right">NA</td>
-<td align="right">0.75076</td>
-<td align="right">NA</td>
-<td align="right">1.602107</td>
-<td align="right">62.80801</td>
-<td align="right">2456842164</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">16.49009</td>
-<td align="right">28.36033</td>
-<td align="right">19.50343</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">2690201386</td>
-<td align="right">3912984371</td>
-<td align="right">1962314336</td>
-<td align="right">50.17295</td>
-<td align="right">49.82705</td>
-<td align="right">1948785837</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">18.16997</td>
-<td align="right">NA</td>
-<td align="right">1.982943</td>
-<td align="right">30.13313</td>
-<td align="right">5.479838</td>
-<td align="right">57.27680</td>
-<td align="right">37.24336</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">2265472</td>
-<td align="right">6.661256</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">10592700195</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.0523653</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">5409389</td>
-<td align="right">1578887</td>
-<td align="right">74.97218</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">60.04732</td>
-<td align="right">NA</td>
-<td align="right">129856550</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">682641975602</td>
-<td align="right">14.48567</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">4726947795946</td>
-<td align="right">NA</td>
-<td align="right">27.20101</td>
-<td align="right">1238083420307</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">6.555961</td>
-<td align="right">1185.2676</td>
-<td align="right">4.482274</td>
-<td align="right">6.5540979</td>
-<td align="right">4637933492078</td>
-<td align="right">8.636812</td>
-<td align="right">11.105902</td>
-<td align="right">16.99991</td>
-<td align="right">15.11488</td>
-<td align="right">NA</td>
-<td align="right">697729540183</td>
-<td align="right">10.788945</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">16155000000</td>
-<td align="right">0.2635863</td>
-<td align="right">62.17182</td>
-<td align="right">31.61276</td>
-<td align="right">18.59521</td>
-<td align="right">9.377227</td>
-<td align="right">3.119569</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">33.80810</td>
-<td align="right">6069322</td>
-<td align="right">19.18648</td>
-<td align="right">2.674105</td>
-<td align="right">17.56572</td>
-<td align="right">3.408856</td>
-<td align="right">26.49442</td>
-<td align="right">7957675</td>
-<td align="right">47.89125</td>
-<td align="right">2428530</td>
-<td align="right">13.54213</td>
-<td align="right">33.34390</td>
-<td align="right">4.493253</td>
-<td align="right">17582029</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.7836924</td>
-<td align="right">30.44964</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">World</td>
-<td align="left">WLD</td>
-<td align="right">1974</td>
-<td align="right">2.661422</td>
-<td align="right">37.45909</td>
-<td align="right">NA</td>
-<td align="right">1493546941</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">34.99767</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">4.132328</td>
-<td align="right">27783247</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">64.89001</td>
-<td align="right">55.85839</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">13800000</td>
-<td align="right">226000000</td>
-<td align="right">NA</td>
-<td align="right">0.76295</td>
-<td align="right">NA</td>
-<td align="right">1.495930</td>
-<td align="right">62.54091</td>
-<td align="right">2493594794</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">16.37319</td>
-<td align="right">28.48107</td>
-<td align="right">19.77710</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">-387103795</td>
-<td align="right">3988487336</td>
-<td align="right">2000601792</td>
-<td align="right">50.18361</td>
-<td align="right">49.81639</td>
-<td align="right">1985962300</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">18.20268</td>
-<td align="right">NA</td>
-<td align="right">1.929549</td>
-<td align="right">30.71468</td>
-<td align="right">5.529704</td>
-<td align="right">57.39602</td>
-<td align="right">37.07427</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">2215857</td>
-<td align="right">6.916908</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">14316839844</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.3982965</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">5366479</td>
-<td align="right">1583766</td>
-<td align="right">73.33041</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">60.54066</td>
-<td align="right">NA</td>
-<td align="right">129856080</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">974594491156</td>
-<td align="right">17.76479</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">5458254238767</td>
-<td align="right">NA</td>
-<td align="right">26.70979</td>
-<td align="right">1424356853937</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1.565503</td>
-<td align="right">1340.1973</td>
-<td align="right">0.010470</td>
-<td align="right">1.9402214</td>
-<td align="right">5345359783071</td>
-<td align="right">12.813553</td>
-<td align="right">19.815554</td>
-<td align="right">15.72733</td>
-<td align="right">13.71608</td>
-<td align="right">NA</td>
-<td align="right">968168841590</td>
-<td align="right">9.510633</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">15382000000</td>
-<td align="right">0.2466779</td>
-<td align="right">59.62995</td>
-<td align="right">30.33426</td>
-<td align="right">20.28587</td>
-<td align="right">9.443168</td>
-<td align="right">3.956453</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">33.87520</td>
-<td align="right">6075065</td>
-<td align="right">19.30468</td>
-<td align="right">2.642019</td>
-<td align="right">16.94790</td>
-<td align="right">3.423888</td>
-<td align="right">26.50532</td>
-<td align="right">7914673</td>
-<td align="right">47.68235</td>
-<td align="right">2459300</td>
-<td align="right">13.73403</td>
-<td align="right">33.81893</td>
-<td align="right">4.403582</td>
-<td align="right">17563630</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.7679719</td>
-<td align="right">29.60587</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">World</td>
-<td align="left">WLD</td>
-<td align="right">1975</td>
-<td align="right">2.471327</td>
-<td align="right">37.68549</td>
-<td align="right">NA</td>
-<td align="right">1530457371</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">5.96593</td>
-<td align="right">32.94999</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">3.791418</td>
-<td align="right">28245747</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">65.59640</td>
-<td align="right">56.60666</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">298066530000</td>
-<td align="right">6.061778</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">14200000</td>
-<td align="right">234000000</td>
-<td align="right">NA</td>
-<td align="right">0.77384</td>
-<td align="right">NA</td>
-<td align="right">1.486969</td>
-<td align="right">62.31451</td>
-<td align="right">2530673774</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">16.47001</td>
-<td align="right">28.62487</td>
-<td align="right">19.87997</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">4468382886</td>
-<td align="right">4062507027</td>
-<td align="right">2038133671</td>
-<td align="right">50.19358</td>
-<td align="right">49.80642</td>
-<td align="right">2022412506</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">18.13799</td>
-<td align="right">NA</td>
-<td align="right">1.855834</td>
-<td align="right">31.28481</td>
-<td align="right">5.579070</td>
-<td align="right">57.57479</td>
-<td align="right">36.84614</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">2306421</td>
-<td align="right">7.007090</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">18382650391</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.3471831</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">5490220</td>
-<td align="right">1602194</td>
-<td align="right">70.31441</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">60.98546</td>
-<td align="right">NA</td>
-<td align="right">129855560</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1029318770220</td>
-<td align="right">16.64504</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">6072356291597</td>
-<td align="right">NA</td>
-<td align="right">24.99119</td>
-<td align="right">1458685579582</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.403142</td>
-<td align="right">1465.6988</td>
-<td align="right">-1.120047</td>
-<td align="right">0.7150007</td>
-<td align="right">5954411788549</td>
-<td align="right">13.542547</td>
-<td align="right">19.652616</td>
-<td align="right">16.17372</td>
-<td align="right">14.18642</td>
-<td align="right">NA</td>
-<td align="right">1026985791257</td>
-<td align="right">-4.185164</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">17335000000</td>
-<td align="right">0.2693686</td>
-<td align="right">58.46291</td>
-<td align="right">30.56532</td>
-<td align="right">20.04658</td>
-<td align="right">9.148928</td>
-<td align="right">5.339402</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">34.84412</td>
-<td align="right">6276738</td>
-<td align="right">20.04062</td>
-<td align="right">2.614138</td>
-<td align="right">17.17345</td>
-<td align="right">3.654367</td>
-<td align="right">25.50336</td>
-<td align="right">7854783</td>
-<td align="right">47.11143</td>
-<td align="right">2467434</td>
-<td align="right">13.71827</td>
-<td align="right">33.62812</td>
-<td align="right">4.342629</td>
-<td align="right">17641960</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0.7659206</td>
-<td align="right">28.98268</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="szukanie-najlepszych-features" class="section level2">
-<h2>Szukanie najlepszych features</h2>
+goldPricesAndWorldIndicators &lt;- merge(x=worldIndicatorsForWholeWorld, y=goldPricesYearly, by=&#39;year&#39;)
+
+goldPricesAndWorldIndicators_mis &lt;- missForest(goldPricesAndWorldIndicators[4:216])</code></pre>
+<pre><code>##   removed variable(s) 7 10 25 27 28 30 31 33 34 35 36 37 38 50 51 52 53 54 55 68 73 78 80 84 90 92 93 101 103 111 112 113 114 121 122 123 124 127 128 139 147 152 154 169 186 188 189 208 210 due to the missingness of all entries
+##   missForest iteration 1 in progress...</code></pre>
+<pre><code>## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?</code></pre>
+<pre><code>## done!
+##   missForest iteration 2 in progress...</code></pre>
+<pre><code>## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?</code></pre>
+<pre><code>## done!
+##   missForest iteration 3 in progress...</code></pre>
+<pre><code>## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?</code></pre>
+<pre><code>## done!
+##   missForest iteration 4 in progress...</code></pre>
+<pre><code>## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?</code></pre>
+<pre><code>## done!
+##   missForest iteration 5 in progress...</code></pre>
+<pre><code>## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?</code></pre>
+<pre><code>## done!
+##   missForest iteration 6 in progress...</code></pre>
+<pre><code>## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?</code></pre>
+<pre><code>## done!
+##   missForest iteration 7 in progress...</code></pre>
+<pre><code>## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?
+
+## Warning in randomForest.default(x = obsX, y = obsY, ntree = ntree, mtry =
+## mtry, : The response has five or fewer unique values. Are you sure you want to
+## do regression?</code></pre>
+<pre><code>## done!</code></pre>
+<pre class="r"><code>goldPricesAndWorldIndicators_mis_ximp &lt;- goldPricesAndWorldIndicators_mis$ximp
+goldPricesAndWorldIndicators &lt;- goldPricesAndWorldIndicators$ximp
+knitr::kable(head(goldPricesAndWorldIndicators))</code></pre>
+<p>|| || || || control &lt;- trainControl(method=“repeatedcv”, number=10, repeats=3) model &lt;- train(diabetes~., data=PimaIndiansDiabetes, method=“lvq”, preProcess=“scale”, trControl=control)</p>
+<p>importance &lt;- varImp(model, scale=FALSE) importance ## Szukanie najlepszych features</p>
 <pre class="r"><code>correlationMatrix &lt;- cor(cleanedWorldDevelopmentIndicatorsResult[,4:211],use=&quot;pairwise.complete.obs&quot;)
 correlationMatrix&lt;-correlationMatrix[,colSums(is.na(correlationMatrix))==0]
 highlyCorrelated &lt;- findCorrelation(correlationMatrix, cutoff=0.5)

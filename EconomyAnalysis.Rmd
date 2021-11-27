@@ -17,6 +17,7 @@ r = getOption("repos")
 r["CRAN"] = "http://cran.us.r-project.org"
 options(repos = r)
 install.packages("readxl")
+install.packages("missForest")
 ```
 ```{r}
 library("readxl")
@@ -25,6 +26,7 @@ library(tidyr)
 library(ggplot2)
 library(mlbench)
 library(caret)
+library(missForest)
 ```
 
 ## Wczytanie danych z pliku
@@ -108,8 +110,18 @@ geom_line()
 worldIndicatorsForWholeWorld <- cleanedWorldDevelopmentIndicatorsResult %>%
   filter(`Country Name` == 'World')
 goldPricesAndWorldIndicators <- merge(x=worldIndicatorsForWholeWorld, y=goldPricesYearly, by='year')
-knitr::kable(head(goldPricesAndWorldIndicators))
+
+goldPricesAndWorldIndicators_mis <- missForest(goldPricesAndWorldIndicators[4:219])
+goldPricesAndWorldIndicators_mis_ximp <- goldPricesAndWorldIndicators_mis$ximp
+goldPricesAndWorldIndicators <- goldPricesAndWorldIndicators$ximp
+control <- trainControl(method="repeatedcv", number=10, repeats=3)
+model <- train(gold_usd~., data=goldPricesAndWorldIndicators, method="rf", preProcess="scale", trControl=control)
+
+importance <- varImp(model, scale=FALSE)
+print(importance)
+
 ```
+
 ## Szukanie najlepszych features
 ```{r best_features}
 correlationMatrix <- cor(cleanedWorldDevelopmentIndicatorsResult[,4:211],use="pairwise.complete.obs")
