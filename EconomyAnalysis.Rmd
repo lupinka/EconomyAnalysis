@@ -12,14 +12,14 @@ options(scipen=999)
 ```
 
 ## Instalacja bibliotek
-```{r cache=TRUE}
+```{r cache=TRUE, warning=FALSE}
 r = getOption("repos")
 r["CRAN"] = "http://cran.us.r-project.org"
 options(repos = r)
 install.packages("readxl")
 install.packages("missForest")
 ```
-```{r}
+```{r warning=FALSE, message=FALSE}
 library("readxl")
 library(dplyr)
 library(tidyr)
@@ -73,19 +73,32 @@ knitr::kable(head(worldDevelopmentIndicators))
 
 ## Czyszczenie danych worldDevelopmentIndicators
 
-```{r clean dataset}
+```{r clean dataset, warning=FALSE}
 cleanedWorldDevelopmentIndicators <- worldDevelopmentIndicators[c(1:42600, 43666:43878),]
 cleanedWorldDevelopmentIndicators <- cleanedWorldDevelopmentIndicators %>% 
-  mutate_at(vars(!c('Country Name', 'Country Code', 'Series Name', 'Series Code')), as.numeric) %>%
+  mutate_at(vars(!c('Country Name', 'Country Code', 'Series Name', 'Series Code')), as.factor) %>%
   pivot_longer(!c('Country Name', 'Country Code', 'Series Name', 'Series Code'), names_to = "year", values_to="value")
 cleanedWorldDevelopmentIndicators$year <- substr(cleanedWorldDevelopmentIndicators$year,1,4)
 cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicators %>% 
   pivot_wider(names_from = c('Series Name', 'Series Code'), values_from = 'value',  names_glue = "{`Series Name`}") %>%
   mutate_at(vars(year), as.numeric)
+cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicatorsResult %>% select_if(colSums(!is.na(.)) > (nrow(cleanedWorldDevelopmentIndicatorsResult)/2))
 knitr::kable(head(cleanedWorldDevelopmentIndicatorsResult))
 
 ```
 
+## Uzupełnienie wartości NA w zbiorze worldDevelopmentIndicators
+```{r cache=TRUE}
+n <- ncol(cleanedWorldDevelopmentIndicatorsResult)
+worldIndicatorsComplemented <-  missForest(as.data.frame(cleanedWorldDevelopmentIndicatorsResult[3:n]))$ximp
+```
+```{r}
+worldIndicatorsComplementedDf <- merge(x=cleanedWorldDevelopmentIndicatorsResult[1:2], y=worldIndicatorsComplemented, by = 'row.names', all = TRUE, sort=FALSE)
+worldIndicatorsComplementedDf <- worldIndicatorsComplementedDf[-1]
+names(worldIndicatorsComplementedDf) <- gsub(" ", "_", names(worldIndicatorsComplementedDf))
+knitr::kable(head(worldIndicatorsComplementedDf))
+
+```
 ## Operacje na zbiorze goldPrices
 ```{r clean goldPrices}
 goldPricesYearly <- goldPrices
@@ -102,45 +115,41 @@ ggplot(
       y=gold_usd,
       group=1)
 ) +
+scale_x_discrete(limits=goldPricesYearly$year,breaks=goldPricesYearly$year[seq(1,length(goldPricesYearly$year),by=5)]) +
 geom_line()
 ```
 
 ## Wpływ światowego rozwoju na ceny złota
 ```{r whole-world}
-worldIndicatorsForWholeWorld <- cleanedWorldDevelopmentIndicatorsResult %>%
-  filter(`Country Name` == 'World')
-goldPricesAndWorldIndicators <- merge(x=worldIndicatorsForWholeWorld, y=goldPricesYearly, by='year')
+worldIndicatorsForWholeWorld <- worldIndicatorsComplementedDf %>%
+  filter(Country_Name == 'World')
 
-goldPricesAndWorldIndicators_mis <- missForest(goldPricesAndWorldIndicators[4:219])
-goldPricesAndWorldIndicators_mis_ximp <- goldPricesAndWorldIndicators_mis$ximp
-goldPricesAndWorldIndicators <- goldPricesAndWorldIndicators$ximp
-control <- trainControl(method="repeatedcv", number=10, repeats=3)
-model <- train(gold_usd~., data=goldPricesAndWorldIndicators, method="rf", preProcess="scale", trControl=control)
+goldPricesAndWorldIndicators <- merge(x=worldIndicatorsForWholeWorld[-c(1,2)], y=goldPricesYearly[c('year','gold_usd')], by='year')
 
-importance <- varImp(model, scale=FALSE)
-print(importance)
+control <- trainControl(method="repeatedcv", number=10, repeats=5)
+rfGrid <- expand.grid(mtry = 10:30)
+model <- train(
+  gold_usd~., 
+  data=goldPricesAndWorldIndicators, 
+  method="rf", 
+  na.action = na.pass,
+  tuneGrid = rfGrid,
+  ntree = 30,
+  trControl=control)
 
+importance <- arrange(varImp(model)$importance, desc(Overall)) 
+mostImoortantIndicators_Gold <- head(importance, n=20)
+knitr::kable(mostImoortantIndicators_Gold)
 ```
 
-## Szukanie najlepszych features
-```{r best_features}
-correlationMatrix <- cor(cleanedWorldDevelopmentIndicatorsResult[,4:211],use="pairwise.complete.obs")
-correlationMatrix<-correlationMatrix[,colSums(is.na(correlationMatrix))==0]
-highlyCorrelated <- findCorrelation(correlationMatrix, cutoff=0.5)
-highlyCorrelated = sort(highlyCorrelated)
-reduced_Data = cleanedWorldDevelopmentIndicatorsResult[,-c(highlyCorrelated)]
-knitr::kable(head(reduced_Data))
-
-```
 
 ## GDP 
 ```{r}
 ggplot(
-  cleanedWorldDevelopmentIndicatorsResult, 
+  worldIndicatorsComplementedDf, 
   aes(x=year, 
-      y=`Trade (% of GDP)`,
-      group=1)
+      y=`GDP_per_capita_(current_US$)`)
 ) +
-geom_line() +
-facet_grid(`Country Name` ~ .)
+geom_point() +
+facet_grid(vars(Country_Name), scales="free")
 ```
