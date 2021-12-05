@@ -144,12 +144,12 @@ knitr::kable(mostImoortantIndicators_Gold)
 
 
 ## GDP 
-```{r fig.height=100, fig.width=15}
+```{r fig.height=150, fig.width=12}
 ggplot(
   worldIndicatorsComplementedDf, 
   aes(x=year, 
       y=`GDP_per_capita_(current_US$)`)
 ) +
 geom_line() +
-facet_wrap(vars(Country_Name), ncol = 4)
+facet_wrap(vars(Country_Name), ncol = 5)
 ```
