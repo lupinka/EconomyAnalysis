@@ -17,7 +17,6 @@ r = getOption("repos")
 r["CRAN"] = "http://cran.us.r-project.org"
 options(repos = r)
 install.packages("readxl")
-install.packages("missForest")
 ```
 ```{r warning=FALSE, message=FALSE}
 library("readxl")
@@ -26,7 +25,6 @@ library(tidyr)
 library(ggplot2)
 library(mlbench)
 library(caret)
-library(missForest)
 ```
 
 ## Wczytanie danych z pliku
@@ -76,26 +74,35 @@ knitr::kable(head(worldDevelopmentIndicators))
 ```{r clean dataset, warning=FALSE}
 cleanedWorldDevelopmentIndicators <- worldDevelopmentIndicators[c(1:42600, 43666:43878),]
 cleanedWorldDevelopmentIndicators <- cleanedWorldDevelopmentIndicators %>% 
-  mutate_at(vars(!c('Country Name', 'Country Code', 'Series Name', 'Series Code')), as.factor) %>%
+  mutate_at(vars(!c('Country Name', 'Country Code', 'Series Name', 'Series Code')), as.numeric) %>%
   pivot_longer(!c('Country Name', 'Country Code', 'Series Name', 'Series Code'), names_to = "year", values_to="value")
 cleanedWorldDevelopmentIndicators$year <- substr(cleanedWorldDevelopmentIndicators$year,1,4)
 cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicators %>% 
   pivot_wider(names_from = c('Series Name', 'Series Code'), values_from = 'value',  names_glue = "{`Series Name`}") %>%
   mutate_at(vars(year), as.numeric)
+cleanedWorldDevelopmentIndicatorsResult[cleanedWorldDevelopmentIndicatorsResult == ".." | cleanedWorldDevelopmentIndicatorsResult == ""] <- NA
 cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicatorsResult %>% select_if(colSums(!is.na(.)) > (nrow(cleanedWorldDevelopmentIndicatorsResult)/2))
 knitr::kable(head(cleanedWorldDevelopmentIndicatorsResult))
 
 ```
 
 ## Uzupełnienie wartości NA w zbiorze worldDevelopmentIndicators
-```{r cache=TRUE}
+```{r warning=FALSE}
 n <- ncol(cleanedWorldDevelopmentIndicatorsResult)
-worldIndicatorsComplemented <-  missForest(as.data.frame(cleanedWorldDevelopmentIndicatorsResult[3:n]))$ximp
+missingValuesByCountry <- cleanedWorldDevelopmentIndicatorsResult %>% 
+    group_by(`Country Name`) %>% 
+     summarise_all(~sum(is.na(.))) %>% 
+     transmute(`Country Name`, sumNA = rowSums(.[-1]))
+knitr::kable(missingValuesByCountry)
 ```
 ```{r}
-worldIndicatorsComplementedDf <- merge(x=cleanedWorldDevelopmentIndicatorsResult[1:2], y=worldIndicatorsComplemented, by = 'row.names', all = TRUE, sort=FALSE)
-worldIndicatorsComplementedDf <- worldIndicatorsComplementedDf[-1]
+worldIndicatorsComplementedDf <- cleanedWorldDevelopmentIndicatorsResult %>%
+    group_by(`Country Name`) %>% 
+    mutate_each(funs(replace(., which(is.na(.)), min(., na.rm=TRUE)))) %>%
+    mutate_each(funs(replace(., which(is.infinite(.)), 0)))
 names(worldIndicatorsComplementedDf) <- gsub(" ", "_", names(worldIndicatorsComplementedDf))
+names(cleanedWorldDevelopmentIndicatorsResult) <- gsub(" ", "_", names(cleanedWorldDevelopmentIndicatorsResult))
+
 knitr::kable(head(worldIndicatorsComplementedDf))
 
 ```
@@ -146,10 +153,14 @@ knitr::kable(mostImoortantIndicators_Gold)
 ## GDP 
 ```{r fig.height=150, fig.width=12}
 ggplot(
-  worldIndicatorsComplementedDf, 
+  cleanedWorldDevelopmentIndicatorsResult %>%
+    filter(Country_Name != 'World') %>%
+    arrange(`GDP_(current_US$)`), 
   aes(x=year, 
-      y=`GDP_per_capita_(current_US$)`)
+      y=`GDP_(current_US$)`)
 ) +
 geom_line() +
+geom_line(data=cleanedWorldDevelopmentIndicatorsResult, aes(x=year, y=`GDP_per_capita_(current_US$)`), fill="blue",
+        colour="darkblue", size=1) +
 facet_wrap(vars(Country_Name), ncol = 5)
 ```
