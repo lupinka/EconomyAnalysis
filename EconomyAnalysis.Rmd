@@ -116,14 +116,6 @@ goldPricesYearly <- summarize(goldPricesYearly,
                               gold_gbp = mean(`GBP..AM.`, na.rm=TRUE),
                               gold_euro = mean(`EURO..AM.`, na.rm=TRUE))
 knitr::kable(head(goldPricesYearly))
-ggplot(
-  goldPricesYearly, 
-  aes(x=year, 
-      y=gold_usd,
-      group=1)
-) +
-scale_x_discrete(limits=goldPricesYearly$year,breaks=goldPricesYearly$year[seq(1,length(goldPricesYearly$year),by=5)]) +
-geom_line()
 ```
 
 ## Wpływ światowego rozwoju na ceny złota
@@ -149,18 +141,73 @@ mostImoortantIndicators_Gold <- head(importance, n=20)
 knitr::kable(mostImoortantIndicators_Gold)
 ```
 
+## Diagramy od cen złota
+```{r goldPriceDiagramms}
+ggplot(
+  goldPricesYearly, 
+  aes(x=year, 
+      y=gold_usd,
+      group=1)
+) +
+scale_x_discrete(limits=goldPricesYearly$year,breaks=goldPricesYearly$year[seq(1,length(goldPricesYearly$year),by=5)]) +
+geom_line()
+```
+```{r goldPriceDiagramms2}
+ggplot(
+  goldPricesAndWorldIndicators, 
+  aes(x=`CO2_emissions_from_residential_buildings_and_commercial_and_public_services_(%_of_total_fuel_combustion)`, 
+      y=gold_usd,
+      group=1)
+) +
+geom_line()
+```
+```{r goldPriceDiagramms3}
+ggplot(
+  goldPricesAndWorldIndicators, 
+  aes(x=`Birth_rate,_crude_(per_1,000_people)`, 
+      y=gold_usd,
+      group=1)
+) +
+geom_line()
+```
+```{r goldPriceDiagramms4}
+ggplot(
+  goldPricesAndWorldIndicators, 
+  aes(x=Rural_population, 
+      y=gold_usd,
+      group=1)
+) +
+geom_line()
+```
+```{r goldPriceDiagramms5}
+ggplot(
+  goldPricesAndWorldIndicators, 
+  aes(x=`GDP_(current_US$)`, 
+      y=gold_usd,
+      group=1)
+) +
+geom_line()
+```
 
 ## GDP 
 ```{r fig.height=150, fig.width=12}
+cleanedWorldDevelopmentIndicatorsResultWithoutWorld <- cleanedWorldDevelopmentIndicatorsResult %>%
+    filter(Country_Name != 'World')
+max_gdp_country = max(cleanedWorldDevelopmentIndicatorsResultWithoutWorld$`GDP_(current_US$)`, na.rm = TRUE)
+scaleFactor <- max_gdp_country / max(cleanedWorldDevelopmentIndicatorsResultWithoutWorld$`GDP_per_capita_(current_US$)`, na.rm = TRUE)
+
 ggplot(
-  cleanedWorldDevelopmentIndicatorsResult %>%
-    filter(Country_Name != 'World') %>%
-    arrange(`GDP_(current_US$)`), 
-  aes(x=year, 
-      y=`GDP_(current_US$)`)
+  cleanedWorldDevelopmentIndicatorsResultWithoutWorld,
+  aes(x=year)
 ) +
-geom_line() +
-geom_line(data=cleanedWorldDevelopmentIndicatorsResult, aes(x=year, y=`GDP_per_capita_(current_US$)`), fill="blue",
-        colour="darkblue", size=1) +
-facet_wrap(vars(Country_Name), ncol = 5)
+geom_smooth(aes(y=`GDP_(current_US$)`),  method="loess", col="blue") +
+geom_smooth(aes(y=`GDP_per_capita_(current_US$)` * scaleFactor),  method="loess", col="red") +
+scale_y_continuous(name="GDP(current US$)", sec.axis=sec_axis(~./scaleFactor, name="GDP per capita(current US$)")) +
+theme(
+    axis.title.y.left=element_text(color="blue"),
+    axis.text.y.left=element_text(color="blue"),
+    axis.title.y.right=element_text(color="red"),
+    axis.text.y.right=element_text(color="red")
+  ) +
+facet_wrap(vars(Country_Name), ncol = 4)
 ```
