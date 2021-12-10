@@ -17,6 +17,7 @@ r = getOption("repos")
 r["CRAN"] = "http://cran.us.r-project.org"
 options(repos = r)
 install.packages("readxl")
+install.packages("corrplot")
 ```
 ```{r warning=FALSE, message=FALSE}
 library("readxl")
@@ -24,6 +25,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(mlbench)
+library(corrplot)
 library(caret)
 ```
 
@@ -106,6 +108,7 @@ names(cleanedWorldDevelopmentIndicatorsResult) <- gsub(" ", "_", names(cleanedWo
 knitr::kable(head(worldIndicatorsComplementedDf))
 
 ```
+
 ## Operacje na zbiorze goldPrices
 ```{r clean goldPrices}
 goldPricesYearly <- goldPrices
@@ -118,13 +121,16 @@ goldPricesYearly <- summarize(goldPricesYearly,
 knitr::kable(head(goldPricesYearly))
 ```
 
-## Wpływ światowego rozwoju na ceny złota
-```{r whole-world}
+## Merge worldIndicators and goldPrices
+```{r merge}
 worldIndicatorsForWholeWorld <- worldIndicatorsComplementedDf %>%
   filter(Country_Name == 'World')
 
 goldPricesAndWorldIndicators <- merge(x=worldIndicatorsForWholeWorld[-c(1,2)], y=goldPricesYearly[c('year','gold_usd')], by='year')
+```
 
+## Wpływ światowego rozwoju na ceny złota
+```{r whole-world}
 control <- trainControl(method="repeatedcv", number=10, repeats=5)
 rfGrid <- expand.grid(mtry = 10:30)
 model <- train(
@@ -139,6 +145,14 @@ model <- train(
 importance <- arrange(varImp(model)$importance, desc(Overall)) 
 mostImoortantIndicators_Gold <- head(importance, n=20)
 knitr::kable(mostImoortantIndicators_Gold)
+```
+
+## Corelation Matrix
+```{r fig.height=105, fig.width=105}
+names <- rownames(mostImoortantIndicators_Gold)
+names <- gsub("`", "", all_of(names))
+res <- cor(worldIndicatorsComplementedDf[names])
+corrplot(res, method = 'square', order = 'AOE', type = 'lower', diag = FALSE,  tl.cex=5, cl.cex=4)
 ```
 
 ## Diagramy od cen złota
