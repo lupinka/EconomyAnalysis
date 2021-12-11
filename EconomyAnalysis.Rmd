@@ -1,5 +1,6 @@
 ---
 title: "EconomyAnalysis"
+date: "`r Sys.Date()`"
 output: 
   html_document:
     toc: true
@@ -9,9 +10,20 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(scipen=999)
+set.seed(23)
 ```
 
-## Libraries installation
+## Streszczenie
+Analiza dostępnych danych wymagała kilku czynności, których wykonanie miało wpływ na ostateczne wyniki. Należało wybrać odpowiedni sposób uzupełniania brakujących wartości, by mozliwe było dokonanie regresji. Ze względu na to, że część cech była mocno skorelowana z datą obserwacji po kilku próbach wybrano uzupełnianie brakujących wartości przez wartość minimalną, co pozytywnie wpłynęło na wyniki regresji.
+Niezbędnym było również wstępne wybranie statystyk, które należy przeanalizować, z powodu ich dużej ilości. Najpierw odrzucono te statystyki które miały więcej niż połowę brakujących wartości. Następnie wybrano te najbardziej wpływające na cenę złota. 
+Po sprawdzeniu korelacji okazało się, że na cenę złota w dużej mierze wpływa stan gospodarki - wskaźniki takie jak CPI (Consumer Price Index), S&P composite, czy Dividend.
+Stan rozwoju świata - liczba ludności, zmniejszający się przyrost naturalny w wielu krajach, czy edukacja również mają duży wpływ na ceny złota. Zarówno PKB na osobę, jak i PKB kraju wiąże się ze zwiększeniem wartości złota.
+Pokazano również, że dla poszczególnych krajów wiele czynników rozwoju koreluje ze sobą, mając wpływ na GDP (PKB) danego kraju.
+Przy interpretacji danych należy pamiętać jednak, że część może być przyczyną, a część skutkiem rozwoju. Zwiększająca się ilość CO2 nie jest przyczyną lecz skutkiem zmian.
+To wszystko spowodowało, że mając dane na temat rozwoju państw i/lub gospodarki częściowo przewidzieć ceny złota, jednak należy pamiętać, że na rzeczywistość będą zawsze wpływać czynniki, które przewidzieć dużo trudniej np. kryzysy, pandemie, wojny. 
+ 
+
+## Instalacja bibliotek
 ```{r cache=TRUE, warning=FALSE, message=FALSE}
 r = getOption("repos")
 r["CRAN"] = "http://cran.us.r-project.org"
@@ -19,6 +31,8 @@ options(repos = r)
 install.packages("readxl")
 install.packages("corrplot")
 install.packages("plotly")
+install.packages("heatmaply")
+install.packages("arm")
 ```
 ```{r warning=FALSE, message=FALSE}
 library("readxl")
@@ -29,45 +43,48 @@ library(mlbench)
 library(corrplot)
 library(caret)
 library(plotly)
+library(heatmaply)
+library(arm)
 ```
 
-## Loading data
+## Wczytanie danych z plików
 
-Path to directory with data
+Ścieżka do folderu z danymi
 
 ```{r savePath}
 dataDirectoryPath <- 'C:/Users/anna/OneDrive/Nauka/II semestr II stopień/Zaawansowana Eksploracja Danych/Data pack/Data pack/'
 ```
 
-Loading CurrencyExchangeRates.csv file
+Wczytanie pliku CurrencyExchangeRates.csv
 
 ```{r}
 currencyExchangeRatesPath <- paste0(dataDirectoryPath, 'CurrencyExchangeRates.csv')
 currencyExchangeRates <- read.csv(currencyExchangeRatesPath)
 ```
 
-Loading Gold prices.csv file
+Wczytanie pliku Gold prices.csv
 
 ```{r}
 goldPricesPath <- paste0(dataDirectoryPath, 'Gold prices.csv')
 goldPrices <- read.csv(goldPricesPath)
 ```
 
-Loading S&P Composite.csv file
+Wczytanie pliku S&P Composite.csv
 
 ```{r}
 spCompositePath <- paste0(dataDirectoryPath, 'S&P Composite.csv')
 spComposite <- read.csv(spCompositePath)
 ```
 
-Loading World_Development_Indicators.xlsx file
+
+Wczytanie pliku World_Development_Indicators.xlsx
 ```{r}
 worldDevelopmentIndicatorsPath <- paste0(dataDirectoryPath, 'World_Development_Indicators.xlsx')
 worldDevelopmentIndicators <- read_excel(worldDevelopmentIndicatorsPath)
 ```
 
 
-## Cleaning worldDevelopmentIndicators data
+## Czyszczenie danych na temat rozwoju państw
 
 ```{r clean dataset, warning=FALSE}
 cleanedWorldDevelopmentIndicators <- worldDevelopmentIndicators[c(1:42600, 43666:43878),]
@@ -79,10 +96,11 @@ cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicators %>%
   pivot_wider(names_from = c('Series Name', 'Series Code'), values_from = 'value',  names_glue = "{`Series Name`}") %>%
   mutate_at(vars(year), as.numeric)
 cleanedWorldDevelopmentIndicatorsResult[cleanedWorldDevelopmentIndicatorsResult == ".." | cleanedWorldDevelopmentIndicatorsResult == ""] <- NA
-cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicatorsResult %>% select_if(colSums(!is.na(.)) > (nrow(cleanedWorldDevelopmentIndicatorsResult)/2))
+cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicatorsResult %>%
+select_if(colSums(!is.na(.)) > (nrow(cleanedWorldDevelopmentIndicatorsResult)/2))
 ```
 
-## Filling missing data in world development indicators dataframe
+## Uzupełnienie brakujących wartości
 ```{r warning=FALSE}
 n <- ncol(cleanedWorldDevelopmentIndicatorsResult)
 missingValuesByCountry <- cleanedWorldDevelopmentIndicatorsResult %>% 
@@ -99,12 +117,15 @@ worldIndicatorsComplementedDf <- cleanedWorldDevelopmentIndicatorsResult %>%
     mutate_each(funs(replace(., which(is.infinite(.)), 0)))
 names(worldIndicatorsComplementedDf) <- gsub(" ", "_", names(worldIndicatorsComplementedDf))
 names(cleanedWorldDevelopmentIndicatorsResult) <- gsub(" ", "_", names(cleanedWorldDevelopmentIndicatorsResult))
+worldIndicatorsComplementedDf <- worldIndicatorsComplementedDf  %>%
+  rename(CO2_emissions_residential_buildings_and_services = `CO2_emissions_from_residential_buildings_and_commercial_and_public_services_(%_of_total_fuel_combustion)`) %>%
+  rename(CO2_emissions_from_other_sectors = `CO2_emissions_from_other_sectors,_excluding_residential_buildings_and_commercial_and_public_services_(%_of_total_fuel_combustion)`)
 
 knitr::kable(head(worldIndicatorsComplementedDf))
 
 ```
 
-## Cleaning gold prices dataframe
+## Czyszczenie danych na temat cen złota
 ```{r clean goldPrices}
 goldPricesYearly <- goldPrices
 goldPricesYearly$year <- substr(goldPrices$Date,1,4)
@@ -116,7 +137,7 @@ goldPricesYearly <- summarize(goldPricesYearly,
 knitr::kable(head(goldPricesYearly))
 ```
 
-## Cleaning spComposite dataframe
+## Czyszczenie danych na temat S&P Composite
 ```{r clean spComposite}
 spCompositeYearly <- spComposite
 spCompositeYearly$year <- substr(spComposite$Year,1,4)
@@ -135,44 +156,44 @@ spCompositeYearly <- summarize(spCompositeYearly,
 knitr::kable(head(spCompositeYearly))
 ```
 
-## Data summary
+## Podsumowanie danych
 
-WorldDevelopmentIndicators summary
+Podsumowanie WorldDevelopmentIndicators
 ```{r summaryWorldDevelopmentIndicators}
 knitr::kable(summary(cleanedWorldDevelopmentIndicatorsResult))
 ```
 
-GoldPrices summary
+Podsumowanie GoldPrices
 ```{r summaryGoldPrices}
 knitr::kable(summary(goldPricesYearly))
 ```
 
-SpComposite summary
+Podsumowanie SpComposite
 ```{r summarySpComposite}
 knitr::kable(summary(spCompositeYearly))
 ```
 
-CurrencyExchangerates summary
+Podsumowanie CurrencyExchangeRates
 ```{r summaryCurrencyExchangeRates}
 knitr::kable(summary(currencyExchangeRates))
 ```
 
-## Merge worldIndicators goldPrices and S&P composite 
+## Połącznie danych dotyczących rozwoju świata, cen zlota i stanu gospodarki
 ```{r merge}
 worldIndicatorsForWholeWorld <- worldIndicatorsComplementedDf %>%
   filter(Country_Name == 'World')
 
 goldPricesAndWorldIndicators <- merge(x=worldIndicatorsForWholeWorld[-c(1,2)], y=goldPricesYearly[c('year','gold_usd')], by='year')
-goldPricesAndSpcomposite = merge(x=goldPricesYearly[c('year','gold_usd')], y=spCompositeYearly, by='year')
+goldPricesAndSpcomposite = merge(y=goldPricesYearly[c('year','gold_usd')], x=spCompositeYearly, by='year')
 ```
 
-## Finding world development indicators that influence gold prices the most
+## Znalezienie atrybutów dotyczących rozwoju świata znacząco wpływających na ceny złota
 ```{r whole-world}
 control <- trainControl(method="repeatedcv", number=10, repeats=5)
 rfGrid <- expand.grid(mtry = 10:30)
 model <- train(
   gold_usd~., 
-  data=goldPricesAndWorldIndicators, 
+  data=subset(goldPricesAndWorldIndicators, select = -year), 
   method="rf", 
   na.action = na.pass,
   tuneGrid = rfGrid,
@@ -184,15 +205,37 @@ mostImoortantIndicators_Gold <- head(importance, n=15)
 knitr::kable(mostImoortantIndicators_Gold)
 ```
 
-## Corelation Matrix of most importnant development indicators
-```{r fig.height=120, fig.width=120}
+## Macierz korelacji uzyskanych danych
+```{r  fig.height=12.5, fig.width=12.5}
 names <- c(rownames(mostImoortantIndicators_Gold), 'year')
 names <- gsub("`", "", all_of(names))
-res <- cor(merge(worldIndicatorsComplementedDf[names], goldPricesAndSpcomposite, by='year'))
-corrplot(res, method = 'square', order = 'AOE', type = 'lower', diag = FALSE,  tl.cex=6.75, cl.cex=4)
+dataForCorrelation <- merge(worldIndicatorsForWholeWorld[names], goldPricesAndSpcomposite, by='year')
+res <- cor(dataForCorrelation)
+
+heatmaply_cor(
+  res,
+  xlab = "Features", 
+  ylab = "Features",
+  k_col = 2, 
+  k_row = 2
+)
 ```
 
-## Gold Prices factors diagramm
+
+## Macierz korelacji wyłącznie rozwoju krajów
+```{r  fig.height=12.5, fig.width=12.5}
+res <- cor(worldIndicatorsComplementedDf[names])
+
+heatmaply_cor(
+  res,
+  xlab = "Features", 
+  ylab = "Features",
+  k_col = 2, 
+  k_row = 2
+)
+```
+
+## Wykresy dotyczące wpływu czynników rozwoju świata na ceny złota
 ```{r goldPriceDiagramms}
 g <- ggplot(
   goldPricesYearly, 
@@ -207,7 +250,7 @@ ggplotly(g)
 ```{r goldPriceDiagramms2}
 g <- ggplot(
   goldPricesAndWorldIndicators, 
-  aes(x=`CO2_emissions_from_residential_buildings_and_commercial_and_public_services_(%_of_total_fuel_combustion)`, 
+  aes(x=`CO2_emissions_residential_buildings_and_services`, 
       y=gold_usd,
       group=1)
 ) +
@@ -245,7 +288,7 @@ geom_line()
 ggplotly(g)
 ```
 
-## S&P Composite
+## Wykres przedstawiający wzrost S&P Composite w czasie
 ```{r spCompositeDiagramms}
 g <- ggplot(
   spCompositeYearly, 
@@ -257,7 +300,7 @@ geom_line()
 ggplotly(g)
 ```
 
-## GDP 
+## Wskaźnik PKB w poszczególnych krajach.
 ```{r fig.height=150, fig.width=12}
 cleanedWorldDevelopmentIndicatorsResultWithoutWorld <- cleanedWorldDevelopmentIndicatorsResult %>%
     filter(Country_Name != 'World')
@@ -280,3 +323,90 @@ theme(
 facet_wrap(vars(Country_Name), ncol = 4)
 ggplotly(g)
 ```
+
+## Regresja przewidująca cenę złota na podstawie wielu danych
+```{r cache=TRUE, warning=FALSE, message=FALSE}
+idx <- 
+    createDataPartition(
+        dataForCorrelation$gold_usd,
+        p = .75,
+        list = FALSE)
+
+training <- dataForCorrelation[idx,]
+testing <- dataForCorrelation[-idx,]
+
+control <- trainControl(method="repeatedcv", number=2, repeats=5)
+rfGrid <- expand.grid(mtry = 10:30)
+modelRandomForest <- train(
+  gold_usd~., 
+  data=training, 
+  method="rf", 
+  na.action = na.pass,
+  tuneGrid = rfGrid,
+  ntree = 10,
+  trControl=control)
+```
+```{r cache=TRUE, warning=FALSE, message=FALSE}
+modelBGLm <- train(
+  gold_usd~., 
+  data=training, 
+  method="bayesglm", 
+  na.action = na.pass,
+  trControl=control)
+```
+```{r cache=TRUE, warning=FALSE, message=FALSE}
+lGrid <- expand.grid(intercept = 1:20)
+modelLogicBag <- train(
+  gold_usd~., 
+  data=training, 
+  method="lm", 
+  na.action = na.pass,
+  tuneGrid = lGrid,
+  trControl=control)
+```
+```{r}
+rfPred <- predict(modelRandomForest , testing)
+knitr::kable(postResample(pred = rfPred, obs = testing$gold_usd))
+bPred <- predict(modelBGLm , testing)
+knitr::kable(postResample(pred = bPred, obs = testing$gold_usd))
+lPred <- predict(modelLogicBag , testing)
+knitr::kable(postResample(pred = lPred, obs = testing$gold_usd))
+```
+
+## Wazność atrybutów dla modelu RandomForest
+```{r variableImportance}
+importance <- arrange(varImp(modelRandomForest)$importance, desc(Overall))
+knitr::kable(importance)
+```
+
+## Regresja przewidująca cenę złota używając wyłącznie danych dotyczących rozwoju świata
+```{r cache=TRUE}
+idx <- 
+    createDataPartition(
+        goldPricesAndWorldIndicators$gold_usd,
+        p = .75,
+        list = FALSE)
+
+training <- goldPricesAndWorldIndicators[idx,]
+testing <- goldPricesAndWorldIndicators[-idx,]
+
+control <- trainControl(method="repeatedcv", number=2, repeats=5)
+rfGrid <- expand.grid(mtry = 10:30)
+modelRandomForest_WorldIndicators <- train(
+  gold_usd~., 
+  data=training, 
+  method="rf", 
+  na.action = na.pass,
+  tuneGrid = rfGrid,
+  ntree = 15,
+  trControl=control)
+```
+```{r}
+indPred <- predict(modelRandomForest_WorldIndicators , testing)
+knitr::kable(postResample(pred = indPred, obs = testing$gold_usd))
+```
+
+## Ważność atrynbutów
+```{r variableImportance2}
+importance <- arrange(varImp(modelRandomForest_WorldIndicators)$importance, desc(Overall))
+knitr::kable(head(importance, 20))
