@@ -11,13 +11,14 @@ knitr::opts_chunk$set(echo = TRUE)
 options(scipen=999)
 ```
 
-## Instalacja bibliotek
-```{r cache=TRUE, warning=FALSE}
+## Libraries installation
+```{r cache=TRUE, warning=FALSE, message=FALSE}
 r = getOption("repos")
 r["CRAN"] = "http://cran.us.r-project.org"
 options(repos = r)
 install.packages("readxl")
 install.packages("corrplot")
+install.packages("plotly")
 ```
 ```{r warning=FALSE, message=FALSE}
 library("readxl")
@@ -27,51 +28,46 @@ library(ggplot2)
 library(mlbench)
 library(corrplot)
 library(caret)
+library(plotly)
 ```
 
-## Wczytanie danych z pliku
+## Loading data
 
-Ścieżka do folderu z danymi
+Path to directory with data
 
 ```{r savePath}
 dataDirectoryPath <- 'C:/Users/anna/OneDrive/Nauka/II semestr II stopień/Zaawansowana Eksploracja Danych/Data pack/Data pack/'
 ```
 
-Wczytanie pliku CurrencyExchangeRates.csv
+Loading CurrencyExchangeRates.csv file
 
 ```{r}
 currencyExchangeRatesPath <- paste0(dataDirectoryPath, 'CurrencyExchangeRates.csv')
 currencyExchangeRates <- read.csv(currencyExchangeRatesPath)
 ```
 
-Wczytanie pliku Gold prices.csv
+Loading Gold prices.csv file
 
 ```{r}
 goldPricesPath <- paste0(dataDirectoryPath, 'Gold prices.csv')
 goldPrices <- read.csv(goldPricesPath)
 ```
 
-Wczytanie pliku S&P Composite.csv
+Loading S&P Composite.csv file
 
 ```{r}
 spCompositePath <- paste0(dataDirectoryPath, 'S&P Composite.csv')
 spComposite <- read.csv(spCompositePath)
 ```
 
-Wczytanie pliku World_Development_Indicators.xlsx
+Loading World_Development_Indicators.xlsx file
 ```{r}
 worldDevelopmentIndicatorsPath <- paste0(dataDirectoryPath, 'World_Development_Indicators.xlsx')
 worldDevelopmentIndicators <- read_excel(worldDevelopmentIndicatorsPath)
 ```
 
-## Podsumowanie danych 
 
-```{r summary}
-knitr::kable(summary(worldDevelopmentIndicators))
-knitr::kable(head(worldDevelopmentIndicators))
-```
-
-## Czyszczenie danych worldDevelopmentIndicators
+## Cleaning worldDevelopmentIndicators data
 
 ```{r clean dataset, warning=FALSE}
 cleanedWorldDevelopmentIndicators <- worldDevelopmentIndicators[c(1:42600, 43666:43878),]
@@ -84,20 +80,19 @@ cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicators %>%
   mutate_at(vars(year), as.numeric)
 cleanedWorldDevelopmentIndicatorsResult[cleanedWorldDevelopmentIndicatorsResult == ".." | cleanedWorldDevelopmentIndicatorsResult == ""] <- NA
 cleanedWorldDevelopmentIndicatorsResult <- cleanedWorldDevelopmentIndicatorsResult %>% select_if(colSums(!is.na(.)) > (nrow(cleanedWorldDevelopmentIndicatorsResult)/2))
-knitr::kable(head(cleanedWorldDevelopmentIndicatorsResult))
-
 ```
 
-## Uzupełnienie wartości NA w zbiorze worldDevelopmentIndicators
+## Filling missing data in world development indicators dataframe
 ```{r warning=FALSE}
 n <- ncol(cleanedWorldDevelopmentIndicatorsResult)
 missingValuesByCountry <- cleanedWorldDevelopmentIndicatorsResult %>% 
-    group_by(`Country Name`) %>% 
-     summarise_all(~sum(is.na(.))) %>% 
-     transmute(`Country Name`, sumNA = rowSums(.[-1]))
-knitr::kable(missingValuesByCountry)
+  group_by(`Country Name`) %>% 
+  summarise_all(~sum(is.na(.))) %>% 
+  transmute(`Country Name`, sumNA = rowSums(.[-1])) %>%
+  arrange(desc(sumNA))
+knitr::kable(head(missingValuesByCountry, 20))
 ```
-```{r}
+```{r warning=FALSE}
 worldIndicatorsComplementedDf <- cleanedWorldDevelopmentIndicatorsResult %>%
     group_by(`Country Name`) %>% 
     mutate_each(funs(replace(., which(is.na(.)), min(., na.rm=TRUE)))) %>%
@@ -109,7 +104,7 @@ knitr::kable(head(worldIndicatorsComplementedDf))
 
 ```
 
-## Operacje na zbiorze goldPrices
+## Cleaning gold prices dataframe
 ```{r clean goldPrices}
 goldPricesYearly <- goldPrices
 goldPricesYearly$year <- substr(goldPrices$Date,1,4)
@@ -121,15 +116,57 @@ goldPricesYearly <- summarize(goldPricesYearly,
 knitr::kable(head(goldPricesYearly))
 ```
 
-## Merge worldIndicators and goldPrices
+## Cleaning spComposite dataframe
+```{r clean spComposite}
+spCompositeYearly <- spComposite
+spCompositeYearly$year <- substr(spComposite$Year,1,4)
+spCompositeYearly <- group_by(spCompositeYearly, year)
+spCompositeYearly <- summarize(spCompositeYearly, 
+                              spComposite = mean(`S.P.Composite`, na.rm=TRUE),
+                              dividend = mean(Dividend, na.rm=TRUE),
+                              earnings = mean(Earnings, na.rm=TRUE),
+                              cpi = mean(CPI, na.rm=TRUE),
+                              longInterestRate = mean(`Long.Interest.Rate`, na.rm=TRUE),
+                              realPrice = mean(`Real.Price`, na.rm=TRUE),
+                              realDividend = mean(`Real.Dividend`, na.rm=TRUE),
+                              realEarnings = mean(`Real.Earnings`, na.rm=TRUE),
+                              cyclicallyAdjustedPERattio = mean(`Cyclically.Adjusted.PE.Ratio`,na.rm=TRUE),
+                              )
+knitr::kable(head(spCompositeYearly))
+```
+
+## Data summary
+
+WorldDevelopmentIndicators summary
+```{r summaryWorldDevelopmentIndicators}
+knitr::kable(summary(cleanedWorldDevelopmentIndicatorsResult))
+```
+
+GoldPrices summary
+```{r summaryGoldPrices}
+knitr::kable(summary(goldPricesYearly))
+```
+
+SpComposite summary
+```{r summarySpComposite}
+knitr::kable(summary(spCompositeYearly))
+```
+
+CurrencyExchangerates summary
+```{r summaryCurrencyExchangeRates}
+knitr::kable(summary(currencyExchangeRates))
+```
+
+## Merge worldIndicators goldPrices and S&P composite 
 ```{r merge}
 worldIndicatorsForWholeWorld <- worldIndicatorsComplementedDf %>%
   filter(Country_Name == 'World')
 
 goldPricesAndWorldIndicators <- merge(x=worldIndicatorsForWholeWorld[-c(1,2)], y=goldPricesYearly[c('year','gold_usd')], by='year')
+goldPricesAndSpcomposite = merge(x=goldPricesYearly[c('year','gold_usd')], y=spCompositeYearly, by='year')
 ```
 
-## Wpływ światowego rozwoju na ceny złota
+## Finding world development indicators that influence gold prices the most
 ```{r whole-world}
 control <- trainControl(method="repeatedcv", number=10, repeats=5)
 rfGrid <- expand.grid(mtry = 10:30)
@@ -143,21 +180,21 @@ model <- train(
   trControl=control)
 
 importance <- arrange(varImp(model)$importance, desc(Overall)) 
-mostImoortantIndicators_Gold <- head(importance, n=20)
+mostImoortantIndicators_Gold <- head(importance, n=15)
 knitr::kable(mostImoortantIndicators_Gold)
 ```
 
-## Corelation Matrix
-```{r fig.height=105, fig.width=105}
-names <- rownames(mostImoortantIndicators_Gold)
+## Corelation Matrix of most importnant development indicators
+```{r fig.height=120, fig.width=120}
+names <- c(rownames(mostImoortantIndicators_Gold), 'year')
 names <- gsub("`", "", all_of(names))
-res <- cor(worldIndicatorsComplementedDf[names])
-corrplot(res, method = 'square', order = 'AOE', type = 'lower', diag = FALSE,  tl.cex=5, cl.cex=4)
+res <- cor(merge(worldIndicatorsComplementedDf[names], goldPricesAndSpcomposite, by='year'))
+corrplot(res, method = 'square', order = 'AOE', type = 'lower', diag = FALSE,  tl.cex=6.75, cl.cex=4)
 ```
 
-## Diagramy od cen złota
+## Gold Prices factors diagramm
 ```{r goldPriceDiagramms}
-ggplot(
+g <- ggplot(
   goldPricesYearly, 
   aes(x=year, 
       y=gold_usd,
@@ -165,42 +202,59 @@ ggplot(
 ) +
 scale_x_discrete(limits=goldPricesYearly$year,breaks=goldPricesYearly$year[seq(1,length(goldPricesYearly$year),by=5)]) +
 geom_line()
+ggplotly(g)
 ```
 ```{r goldPriceDiagramms2}
-ggplot(
+g <- ggplot(
   goldPricesAndWorldIndicators, 
   aes(x=`CO2_emissions_from_residential_buildings_and_commercial_and_public_services_(%_of_total_fuel_combustion)`, 
       y=gold_usd,
       group=1)
 ) +
 geom_line()
+ggplotly(g)
 ```
 ```{r goldPriceDiagramms3}
-ggplot(
+g <- ggplot(
   goldPricesAndWorldIndicators, 
   aes(x=`Birth_rate,_crude_(per_1,000_people)`, 
       y=gold_usd,
       group=1)
 ) +
 geom_line()
+ggplotly(g)
 ```
 ```{r goldPriceDiagramms4}
-ggplot(
+g <- ggplot(
   goldPricesAndWorldIndicators, 
   aes(x=Rural_population, 
       y=gold_usd,
       group=1)
 ) +
 geom_line()
+ggplotly(g)
 ```
 ```{r goldPriceDiagramms5}
-ggplot(
+g <- ggplot(
   goldPricesAndWorldIndicators, 
   aes(x=`GDP_(current_US$)`, 
       y=gold_usd,
       group=1)
 ) +
 geom_line()
+ggplotly(g)
+```
+
+## S&P Composite
+```{r spCompositeDiagramms}
+g <- ggplot(
+  spCompositeYearly, 
+  aes(x=year, 
+      y=spComposite,
+      group=1)
+) +
+geom_line()
+ggplotly(g)
 ```
 
 ## GDP 
@@ -210,7 +264,7 @@ cleanedWorldDevelopmentIndicatorsResultWithoutWorld <- cleanedWorldDevelopmentIn
 max_gdp_country = max(cleanedWorldDevelopmentIndicatorsResultWithoutWorld$`GDP_(current_US$)`, na.rm = TRUE)
 scaleFactor <- max_gdp_country / max(cleanedWorldDevelopmentIndicatorsResultWithoutWorld$`GDP_per_capita_(current_US$)`, na.rm = TRUE)
 
-ggplot(
+g <- ggplot(
   cleanedWorldDevelopmentIndicatorsResultWithoutWorld,
   aes(x=year)
 ) +
@@ -224,4 +278,5 @@ theme(
     axis.text.y.right=element_text(color="red")
   ) +
 facet_wrap(vars(Country_Name), ncol = 4)
+ggplotly(g)
 ```
